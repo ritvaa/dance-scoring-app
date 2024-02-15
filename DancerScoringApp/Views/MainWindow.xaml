@@ -1,12 +1,98 @@
-﻿<Window x:Class="DancerScoringApp.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DancerScoringApp"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="DancerScoringApp.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1000">
+     <!--Header--> 
+     <Grid>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="0" Source="logo.png" Width="50" Height="50" Margin="10"/>
+        <TextBlock Grid.Column="1" Text="Welcome, Username" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10"/>
     </Grid>
+
+    <!-- Main Content -->
+    <Grid Margin="10" Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Navigation Panel -->
+        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+            <ListBox Name="ListBoxCompetitions" Margin="5">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" Margin="5">
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding StartTime}"/>
+                                <TextBlock Text="{Binding Status}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+
+        <!-- Main Panel -->
+        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+            <!-- Detailed Information about Selected Competition -->
+            <StackPanel Margin="5">
+                <TextBlock Text="Dancer:" FontWeight="Bold"/>
+                <!-- List of Dancers -->
+                <ListBox Name="ListBoxDancers" Margin="5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" Margin="2"/>
+                                <Image Source="dancer_icon.png" Width="20" Height="20" Margin="2"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Text="Rating Categories:" FontWeight="Bold" Margin="5"/>
+                <!-- List of Rating Categories -->
+                <ListBox Name="ListBoxRatingCategories" Margin="5">
+                    <ListBoxItem>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Category 1" Margin="2"/>
+                            <Image Source="rating_icon.png" Width="20" Height="20" Margin="2"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <!-- Add more ListBoxItems for other categories -->
+                </ListBox>
+                <TextBlock Text="Rating Form:" FontWeight="Bold" Margin="5"/>
+                <!-- Rating Form for Selected Dancer -->
+                <StackPanel Margin="5">
+                    <TextBlock Text="Dancer: XYZ"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Rating: " Margin="2"/>
+                        <Image Source="rating_star_icon.png" Width="20" Height="20" Margin="2"/>
+                    </StackPanel>
+                    <!-- Add more rating criteria as needed -->
+                </StackPanel>
+                <Button Content="Submit Rating" Margin="5"/>
+                <Button Content="Next Dancer" Margin="5"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+
+
+     <!--Footer--> 
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
+        <TextBlock Text="©2024 Your Application Authors | Contact: contact@example.com"/>
+    </StackPanel>
+     </Grid>
 </Window>
