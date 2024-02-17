@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DancerScoringApp.Entities;
 
 public class JudgeRating
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
     public decimal ChoreographyPoints { get; set; }
     public decimal BodyTechniquePoints { get; set; }
     public decimal PropWorkPoints { get; set; }
@@ -20,5 +17,4 @@ public class JudgeRating
     public virtual ICollection<RatingBonus> RatingBonus { get; set; }
 
     #endregion
-
 }

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33717.318
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanceScoringApp", "DancerScoringApp\DanceScoringApp.csproj", "{1B7901A4-FEE3-40F1-9B5E-38F3AB4DBA87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{6C88D872-22CF-4BDA-A0F0-62CB9EA6A9A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B7901A4-FEE3-40F1-9B5E-38F3AB4DBA87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B7901A4-FEE3-40F1-9B5E-38F3AB4DBA87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B7901A4-FEE3-40F1-9B5E-38F3AB4DBA87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B7901A4-FEE3-40F1-9B5E-38F3AB4DBA87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C88D872-22CF-4BDA-A0F0-62CB9EA6A9A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C88D872-22CF-4BDA-A0F0-62CB9EA6A9A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C88D872-22CF-4BDA-A0F0-62CB9EA6A9A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C88D872-22CF-4BDA-A0F0-62CB9EA6A9A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {262777D6-9B91-49DB-92D2-D9C92D1D71BE}
+	EndGlobalSection
+EndGlobal

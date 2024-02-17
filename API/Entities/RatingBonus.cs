@@ -1,14 +1,13 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DancerScoringApp.Entities;
 
 public class RatingBonus
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
+
     public Guid JudgeRatingId { get; set; }
-    public int BonusId { get;}
+    public int BonusId { get; }
 
     #region Entity Relations
 

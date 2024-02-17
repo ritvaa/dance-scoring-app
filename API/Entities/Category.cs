@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DancerScoringApp.Entities;
 
 public class Category
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public int Id { get; set; }
+    public int AgeCategoryId { get; set; }
     public PropType Prop { get; set; }
     public CategoryType CategoryType { get; set; }
 
@@ -29,7 +26,7 @@ public enum PropType
 public enum CategoryType
 {
     Sport,
-    Classic, 
+    Classic,
     Basic,
     Acrobatic,
     TwoBatons

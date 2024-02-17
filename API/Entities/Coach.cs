@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DancerScoringApp.Entities;
 
 public class Coach
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
+
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string FullName => $"{FirstName} {LastName}";
@@ -19,6 +17,4 @@ public class Coach
     public virtual ICollection<TeamCoach> TeamCoaches { get; set; }
 
     #endregion
-
-
 }

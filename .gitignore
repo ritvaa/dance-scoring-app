@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.idea/.idea.DancerScoringApp/.idea
+/.vs
+/API/bin/Debug/net8.0
+/API/obj
+/packages/EntityFramework.6.4.4

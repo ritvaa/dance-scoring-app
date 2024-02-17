@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DancerScoringApp.Entities;
 
 public class Role
 {
-    [Key]
-    public int Id { get; set; }
-    public RoleType RoleType { get; set; }
+    [Key] public int Id { get; set; }
+
+    public RoleType Name { get; set; }
 
     #region Entity Relations
 

@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DancerScoringApp.Entities;
 
 public class Squad
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
+
     public PerformanceType PerformanceType { get; set; }
 
     #region Entity Relations
 
     public virtual ICollection<SquadDancer> Dancers { get; set; }
     public virtual Team Team { get; set; }
-    #endregion
 
+    #endregion
 }
 
-public enum PerformanceType {
+public enum PerformanceType
+{
     Formation,
     MiniFormation,
     Duet,
