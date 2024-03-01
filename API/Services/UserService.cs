@@ -26,9 +26,47 @@ public class UserService : IUserService
         var user = _dbContext.Users.Where(x => x.Id == id);
         return _mapper.Map<UserReadModel>(user);
     }
+
+    public UserReadModel CreateUser(UserWriteModel user)
+    {
+        var existingUsername = _dbContext.Users.FirstOrDefault(x => x.Username == user.UserName);
+        if (existingUsername != null) throw new Exception("User with this username already exists");
+
+        var existingEmail = _dbContext.Users.FirstOrDefault(x => x.Email == user.Email);
+        if (existingEmail != null) throw new Exception("User with this email already exists");
+
+        var newUser = _mapper.Map<User>(user);
+        newUser.Id = Guid.NewGuid();
+
+        var result = _dbContext.Users.Add(newUser).Entity;
+        return _mapper.Map<UserReadModel>(result);
+    }
     
-    // public UserReadModel CreateUser(UserWriteModel user)
-    // {
-    //     
-    // }
+    public UserReadModel UpdateUser(Guid id, UserWriteModel user)
+    {
+        var existingUser = _dbContext.Users.FirstOrDefault(x => x.Id == id);
+        if (existingUser == null) throw new Exception("User not found");
+
+        var existingUsername = _dbContext.Users.FirstOrDefault(x => x.Username == user.UserName && x.Id != id);
+        if (existingUsername != null) throw new Exception("User with this username already exists");
+
+        var existingEmail = _dbContext.Users.FirstOrDefault(x => x.Email == user.Email && x.Id != id);
+        if (existingEmail != null) throw new Exception("User with this email already exists");
+
+        // Mapowanie właściwości z modelu do zapisu na istniejący obiekt użytkownika
+        _mapper.Map(user, existingUser);
+
+        _dbContext.SaveChanges();
+
+        return _mapper.Map<UserReadModel>(existingUser);
+    }
+    
+    public void DeleteUser(Guid id)
+    {
+        var existingUser = _dbContext.Users.FirstOrDefault(x => x.Id == id);
+        if (existingUser == null) throw new Exception("User not found");
+
+        _dbContext.Users.Remove(existingUser);
+        _dbContext.SaveChanges();
+    }
 }

@@ -32,13 +32,14 @@ using (var scope = app.Services.CreateScope()) {
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
-    app.UseSwaggerUI(c => {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "KaszalotAPI v1");
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DanceScoringApp API v1");
     });
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -46,4 +47,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

@@ -1,7 +1,7 @@
 ﻿using API.Contracts;
 using FluentValidation;
 
-namespace UserControllerExample
+namespace API
 {
     public class UserValidator : AbstractValidator<UserWriteModel>
     {
