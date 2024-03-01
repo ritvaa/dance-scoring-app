@@ -5,7 +5,7 @@ namespace API.Services {
     {
         IEnumerable<UserReadModel> GetAllUsers();
         UserReadModel GetUserById(Guid id);
-        UserReadModel CreateUser(UserWriteModel user);
+        ICommandResult CreateUser(UserWriteModel user);
         UserReadModel UpdateUser(Guid id, UserWriteModel user);
         public void DeleteUser(Guid id);
     }

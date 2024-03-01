@@ -1,6 +1,7 @@
 ﻿using API.Contracts;
 using API.Entities;
 using API.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Conterollers;
@@ -10,10 +11,12 @@ namespace API.Conterollers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IMapper mapper)
     {
         _userService = userService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -32,10 +35,11 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<User> Create(UserWriteModel user)
+    public IActionResult Create(UserWriteModel user)
     {
-        var createdUser = _userService.CreateUser(user);
-        return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser);
+        var result = _userService.CreateUser(user);
+        return _mapper.Map<IActionResult>(result);
+
     }
     
     [HttpPut("{id}")]

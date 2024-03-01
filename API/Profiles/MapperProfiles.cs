@@ -13,6 +13,7 @@ namespace API {
         public MapperProfiles()
         {
             CreateMap<User, UserReadModel>();
+            CreateMap<UserWriteModel, User>();
 
         }
     }
