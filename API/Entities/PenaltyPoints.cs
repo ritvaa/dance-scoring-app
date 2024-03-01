@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DancerScoringApp.Entities;
+namespace API.Entities;
 
 public class PenaltyPoints
 {
     [Key] public int Id { get; set; }
 
-    public PenaltyType Name { get; set; }
+    public string Name { get; set; }
     public decimal PenaltyScore { get; set; }
 
     #region Entity Relations
@@ -16,9 +16,10 @@ public class PenaltyPoints
     #endregion
 }
 
-public enum PenaltyType {
+public enum PenaltyType
+{
     //-0.05
-    MissingGreeting,
+    MissingGreeting = 1,
     PropOrCostumePieceDrop,
     LeavingPropOnStageAfterDrop,
     TimeOverrun,

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DancerScoringApp.Entities;
+namespace API.Entities;
 
 public class Competition
 {

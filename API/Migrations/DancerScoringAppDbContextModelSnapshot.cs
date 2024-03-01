@@ -29,8 +29,9 @@ namespace API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AgeCategoryType")
-                        .HasColumnType("integer");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -40,22 +41,22 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            AgeCategoryType = 1
+                            Name = "Cadet"
                         },
                         new
                         {
                             Id = 2,
-                            AgeCategoryType = 2
+                            Name = "Junior"
                         },
                         new
                         {
                             Id = 3,
-                            AgeCategoryType = 3
+                            Name = "Senior"
                         },
                         new
                         {
                             Id = 4,
-                            AgeCategoryType = 4
+                            Name = "Grand Senior"
                         });
                 });
 
@@ -67,8 +68,9 @@ namespace API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Name")
-                        .HasColumnType("integer");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -78,22 +80,22 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            Name = 0
+                            Name = "Orginality"
                         },
                         new
                         {
                             Id = 2,
-                            Name = 1
+                            Name = "Sychronization"
                         },
                         new
                         {
                             Id = 3,
-                            Name = 2
+                            Name = "Perfect Synchronization"
                         },
                         new
                         {
                             Id = 4,
-                            Name = 3
+                            Name = "Presence and Elegance"
                         });
                 });
 
@@ -119,6 +121,190 @@ namespace API.Migrations
                     b.HasIndex("AgeCategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AgeCategoryId = 1,
+                            CategoryType = 0,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AgeCategoryId = 2,
+                            CategoryType = 0,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AgeCategoryId = 3,
+                            CategoryType = 0,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AgeCategoryId = 4,
+                            CategoryType = 0,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AgeCategoryId = 1,
+                            CategoryType = 1,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AgeCategoryId = 2,
+                            CategoryType = 1,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AgeCategoryId = 3,
+                            CategoryType = 1,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AgeCategoryId = 1,
+                            CategoryType = 3,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AgeCategoryId = 2,
+                            CategoryType = 3,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AgeCategoryId = 3,
+                            CategoryType = 3,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AgeCategoryId = 1,
+                            CategoryType = 2,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AgeCategoryId = 2,
+                            CategoryType = 2,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AgeCategoryId = 3,
+                            CategoryType = 2,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 14,
+                            AgeCategoryId = 1,
+                            CategoryType = 4,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 15,
+                            AgeCategoryId = 2,
+                            CategoryType = 4,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 16,
+                            AgeCategoryId = 3,
+                            CategoryType = 4,
+                            Prop = 0
+                        },
+                        new
+                        {
+                            Id = 17,
+                            AgeCategoryId = 1,
+                            CategoryType = 0,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 18,
+                            AgeCategoryId = 2,
+                            CategoryType = 0,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 19,
+                            AgeCategoryId = 3,
+                            CategoryType = 0,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 20,
+                            AgeCategoryId = 4,
+                            CategoryType = 0,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 21,
+                            AgeCategoryId = 1,
+                            CategoryType = 1,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 22,
+                            AgeCategoryId = 2,
+                            CategoryType = 1,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 23,
+                            AgeCategoryId = 3,
+                            CategoryType = 1,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 24,
+                            AgeCategoryId = 1,
+                            CategoryType = 2,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 25,
+                            AgeCategoryId = 2,
+                            CategoryType = 2,
+                            Prop = 1
+                        },
+                        new
+                        {
+                            Id = 26,
+                            AgeCategoryId = 3,
+                            CategoryType = 2,
+                            Prop = 1
+                        });
                 });
 
             modelBuilder.Entity("DancerScoringApp.Entities.Coach", b =>
@@ -250,8 +436,9 @@ namespace API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Name")
-                        .HasColumnType("integer");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<decimal>("PenaltyScore")
                         .HasColumnType("numeric");
@@ -264,50 +451,26 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            Name = 0,
+                            Name = "Missing greeting",
                             PenaltyScore = -0.05m
                         },
                         new
                         {
                             Id = 2,
-                            Name = 1,
+                            Name = "Prop Or Costume Piece Drop",
                             PenaltyScore = -0.05m
                         },
                         new
                         {
                             Id = 3,
-                            Name = 2,
+                            Name = "Leaving prop on stage after drop",
                             PenaltyScore = -0.05m
                         },
                         new
                         {
                             Id = 4,
-                            Name = 3,
+                            Name = "For every second time overrun",
                             PenaltyScore = -0.05m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = 4,
-                            PenaltyScore = -0.1m
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = 5,
-                            PenaltyScore = -0.1m
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = 6,
-                            PenaltyScore = -0.1m
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = 7,
-                            PenaltyScore = -0.1m
                         });
                 });
 
@@ -364,8 +527,9 @@ namespace API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Name")
-                        .HasColumnType("integer");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -375,22 +539,22 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            Name = 0
+                            Name = "Super Admin"
                         },
                         new
                         {
                             Id = 2,
-                            Name = 1
+                            Name = "Judge"
                         },
                         new
                         {
                             Id = 3,
-                            Name = 2
+                            Name = "Technical Judge"
                         },
                         new
                         {
                             Id = 4,
-                            Name = 3
+                            Name = "Scrutineer"
                         });
                 });
 

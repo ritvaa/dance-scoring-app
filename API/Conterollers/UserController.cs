@@ -1,40 +1,64 @@
-﻿using DancerScoringApp.Entities;
+﻿using API.Contracts;
+using API.Entities;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DanceScoringApp.Controllers;
+namespace API.Conterollers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly DancerScoringAppDbContext _appDbContext;
-
-    public UserController(DancerScoringAppDbContext appDbContext)
+    private readonly IUserService _userService;
+    public UserController(IUserService userService)
     {
-        _appDbContext = appDbContext;
+        _userService = userService;
     }
-
     [HttpGet]
-    public ActionResult<IEnumerable<User>> GetTodos()
-    {
-        return _appDbContext.Users.ToList();
+    public ActionResult<IEnumerable<User>> Get() {
+        var users = _userService.GetAllUsers();
+        return Ok(users);
     }
-
+    
     [HttpGet("{id}")]
-    public ActionResult<User> GetTodoById(int id)
-    {
-        var todo = _appDbContext.Users.Find(id);
-        if (todo == null) return NotFound();
-
-        return todo;
+    public ActionResult<User> GetById(Guid id) {
+        var user = _userService.GetUserById(id);
+        
+        return Ok(user);
     }
-
-
+    
     [HttpPost]
-    public ActionResult<User> CreateTodo([FromBody] User user)
-    {
-        _appDbContext.Users.Add(user);
-        _appDbContext.SaveChanges();
-        return CreatedAtAction(nameof(GetTodoById), new { id = user.Id }, user);
+    public ActionResult<User> Create(UserWriteModel user) {
+        var createdUser = _userService.CreateUser(user);
+        return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser);
     }
+    //
+    // [HttpPut("{id}")]
+    // public ActionResult<User> Update(int id, User updatedUser) {
+    //     var user = _userService.GetUserById(id);
+    //     if (user == null) {
+    //         return NotFound();
+    //     }
+    //
+    //     // Aktualizacja danych użytkownika
+    //     user.Name = updatedUser.Name;
+    //     user.Email = updatedUser.Email;
+    //
+    //     _userService.UpdateUser(user);
+    //
+    //     return Ok(user);
+    // }
+    //
+    // [HttpDelete("{id}")]
+    // public IActionResult Delete(int id) {
+    //     var user = _userService.GetUserById(id);
+    //     if (user == null) {
+    //         return NotFound();
+    //     }
+    //
+    //     _userService.DeleteUser(id);
+    //
+    //     return NoContent();
+    // }
+
 }

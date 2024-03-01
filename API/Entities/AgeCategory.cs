@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DancerScoringApp.Entities;
+namespace API.Entities;
 
 public class AgeCategory
 {
     [Key] public int Id { get; set; }
-    public AgeCategoryType AgeCategoryType { get; set; }
+    public string Name { get; set; }
 
     #region Entity Relations
 
@@ -17,7 +17,7 @@ public class AgeCategory
 public enum AgeCategoryType
 {
     Cadet = 1,
-    Junior = 2,
-    Senior = 3,
-    GrandSenior = 4
+    Junior,
+    Senior,
+    GrandSenior,
 }

@@ -1,4 +1,5 @@
-﻿using DancerScoringApp.Entities;
+﻿using API.Contracts;
+using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
 public class DancerScoringAppDbContext : DbContext
@@ -18,61 +19,62 @@ public class DancerScoringAppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         modelBuilder.Entity<JudgeRating>()
             .HasOne(jr => jr.Routine)
             .WithMany(r => r.JudgeRating);
 
 
         modelBuilder.Entity<AgeCategory>().HasData(
-            new AgeCategory { Id = (int)AgeCategoryType.Cadet, AgeCategoryType = AgeCategoryType.Cadet },
-            new AgeCategory { Id = (int)AgeCategoryType.Junior, AgeCategoryType = AgeCategoryType.Junior },
-            new AgeCategory { Id = (int)AgeCategoryType.Senior, AgeCategoryType = AgeCategoryType.Senior },
-            new AgeCategory { Id = (int)AgeCategoryType.GrandSenior, AgeCategoryType = AgeCategoryType.GrandSenior }
-        );                              
+            new AgeCategory { Id = (int)AgeCategoryType.Cadet, Name = "Cadet" },
+            new AgeCategory { Id = (int)AgeCategoryType.Junior, Name = "Junior" },
+            new AgeCategory { Id = (int)AgeCategoryType.Senior, Name = "Senior" },
+            new AgeCategory { Id = (int)AgeCategoryType.GrandSenior, Name = "Grand Senior" }
+        );
 
-        //modelBuilder.Entity<Category>().HasData(
+        modelBuilder.Entity<Category>().HasData(
 
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Cadet},
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Junior },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Senior },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.GrandSenior },
+            new Category {Id = 1, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 2, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 3, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Senior },
+            new Category {Id = 4, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.GrandSenior },
 
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Junior},
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Senior},
+            new Category {Id = 5, Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 6, Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 7, Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Senior },
 
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Junior },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Senior },
+            new Category {Id = 8, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 9, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 10, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Senior },
 
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Junior },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Senior },
+            new Category {Id = 11, Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 12, Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 13, Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Senior },
 
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Cadet },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Junior },
-        //    new Category { Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Senior },
+            new Category {Id = 14, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 15, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 16, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Senior },
 
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Cadet},
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Junior },
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Senior },
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.GrandSenior },
-
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Junior },
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Senior },
-
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Junior },
-        //    new Category { Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Senior }
-        //);
+            new Category {Id = 17, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 18, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 19, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Senior },
+            new Category {Id = 20, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.GrandSenior },
+                          
+            new Category {Id = 21, Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 22, Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 23, Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Senior },
+                         
+            new Category {Id = 24, Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Cadet },
+            new Category {Id = 25, Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Junior },
+            new Category {Id = 26, Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Senior }
+        );
 
 
         modelBuilder.Entity<Bonus>().HasData(
-            new Bonus { Id = 1, Name = BonusType.Originality },
-            new Bonus { Id = 2, Name = BonusType.Synchronization },
-            new Bonus { Id = 3, Name = BonusType.PerfectSynchronization },
-            new Bonus { Id = 4,  Name = BonusType.PresenceAndElegance }
+            new Bonus { Id = (int) BonusType.Originality, Name = "Orginality" },
+            new Bonus { Id = (int) BonusType.Synchronization, Name = "Sychronization"},
+            new Bonus { Id = (int) BonusType.PerfectSynchronization, Name = "Perfect Synchronization"},
+            new Bonus { Id = (int) BonusType.PresenceAndElegance, Name = "Presence and Elegance" }
         );
 
         modelBuilder.Entity<Role>()
@@ -80,10 +82,10 @@ public class DancerScoringAppDbContext : DbContext
             .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Role>().HasData(
-            new Role { Id = 1, Name = RoleType.SuperAdmin },
-            new Role { Id = 2, Name = RoleType.Judge },
-            new Role { Id = 3, Name = RoleType.TechnicalJudge },
-            new Role { Id = 4, Name = RoleType.Scrutineer }
+            new Role { Id = (int) RoleType.SuperAdmin, Name = "Super Admin"},
+            new Role { Id = (int) RoleType.Judge, Name = "Judge" },
+            new Role { Id = (int) RoleType.TechnicalJudge, Name = "Technical Judge" },
+            new Role { Id = (int) RoleType.Scrutineer, Name = "Scrutineer" }
         );
 
 
@@ -93,38 +95,155 @@ public class DancerScoringAppDbContext : DbContext
 
 
         modelBuilder.Entity<PenaltyPoints>().HasData(
-            new PenaltyPoints {Id = 1, Name = PenaltyType.MissingGreeting, PenaltyScore = -0.05m},
-            new PenaltyPoints {Id = 2, Name = PenaltyType.PropOrCostumePieceDrop, PenaltyScore = -0.05m},
-            new PenaltyPoints {Id = 3, Name = PenaltyType.LeavingPropOnStageAfterDrop, PenaltyScore = -0.05m },
-            new PenaltyPoints {Id = 4, Name = PenaltyType.TimeOverrun, PenaltyScore = -0.05m },
-
-            new PenaltyPoints {Id = 5, Name = PenaltyType.NotReadyAfterAnnouncement, PenaltyScore = -0.1m },
-            new PenaltyPoints {Id = 6, Name = PenaltyType.CrossingLine, PenaltyScore = -0.1m },
-            new PenaltyPoints {Id = 7, Name = PenaltyType.IncorrectlyMixedMusic, PenaltyScore = -0.1m },
-            new PenaltyPoints {Id = 8, Name = PenaltyType.DancerSupport, PenaltyScore = -0.1m }
-
-            //new PenaltyPoints {Name = PenaltyType.EarlyEntrance, PenaltyScore = -0.2m },
-            //new PenaltyPoints {Name = PenaltyType.MissingStopFigure, PenaltyScore = -0.2m },
-
-            //new PenaltyPoints {Name = PenaltyType.MissingSingleRequiredCostumeElement, PenaltyScore = -0.3m },
-            //new PenaltyPoints {Name = PenaltyType.CommunicationDuringPresentation, PenaltyScore = -0.3m },
-            //new PenaltyPoints {Name = PenaltyType.MissingPropContact, PenaltyScore = -0.3m },
-            //new PenaltyPoints {Name = PenaltyType.MissingLiftAssurance, PenaltyScore = -0.3m },
-
-            //new PenaltyPoints {Name = PenaltyType.MissingSingleRequiredElement, PenaltyScore = -0.4m },
-            //new PenaltyPoints {Name = PenaltyType.CompetitorFall, PenaltyScore = -0.4m },
-            //new PenaltyPoints {Name = PenaltyType.PuttingDownPropForMoreThan16MarchingSteps, PenaltyScore = -0.4m },
-            //new PenaltyPoints {Name = PenaltyType.NonRegulationMusic, PenaltyScore = -0.4m },
-            //new PenaltyPoints {Name = PenaltyType.DifferentChoreographyFromPreviousQualifications, PenaltyScore = -0.4m },
-            //new PenaltyPoints {Name = PenaltyType.NonRegulationPropOrCostumeElement, PenaltyScore = -0.4m },
-
-            //new PenaltyPoints {Name = PenaltyType.ThreeTieredPyramids, PenaltyScore = -3m },
-            //new PenaltyPoints {Name = PenaltyType.CategoryProhibitedElements, PenaltyScore = -3m },
-            //new PenaltyPoints {Name = PenaltyType.UnjustifiedLiftsAndThrows, PenaltyScore = -3m },
-            //new PenaltyPoints {Name = PenaltyType.PlacingNonDedicatedPropsOnStage, PenaltyScore = -3m },
-
-            //new PenaltyPoints {Name = PenaltyType.Disqualification, PenaltyScore = -100m}
-
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.MissingGreeting,
+                Name = "Missing greeting",
+                PenaltyScore = -0.05m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.PropOrCostumePieceDrop,
+                Name = "Prop or costume piece drop",
+                PenaltyScore = -0.05m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.LeavingPropOnStageAfterDrop,
+                Name = "Leaving prop on stage after drop",
+                PenaltyScore = -0.05m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.TimeOverrun,
+                Name = "For every second time overrun",
+                PenaltyScore = -0.05m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.NotReadyAfterAnnouncement,
+                Name = "Team or solist is not ready after announcement",
+                PenaltyScore = -0.1m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.CrossingLine,
+                Name = "Crossing a line",
+                PenaltyScore = -0.1m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.IncorrectlyMixedMusic,
+                Name = "Incorrectyly mixed music",
+                PenaltyScore = -0.1m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.DancerSupport,
+                Name = "The dancer supports themselves",
+                PenaltyScore = -0.1m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.EarlyEntrance,
+                Name = "Too early entrance",
+                PenaltyScore = -0.2m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.MissingStopFigure,
+                Name = "Missing stop figure at the end",
+                PenaltyScore = -0.2m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.MissingSingleRequiredCostumeElement,
+                Name = "Missing single required costume element",
+                PenaltyScore = -0.3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.CommunicationDuringPresentation,
+                Name = "Communication between dancers or dancers and coach during presentation",
+                PenaltyScore = -0.3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.MissingPropContact,
+                Name = "Missing prop contact",
+                PenaltyScore = -0.3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.MissingLiftAssurance,
+                Name = "Missing lift assurance",
+                PenaltyScore = -0.3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.MissingSingleRequiredElement,
+                Name = "Missing single required element",
+                PenaltyScore = -0.4m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.CompetitorFall,
+                Name = "Dancer fall", PenaltyScore = -0.4m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.PuttingDownPropForMoreThan16MarchingSteps,
+                Name = "Putting down prop for more than 16 matching steps",
+                PenaltyScore = -0.4m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.NonRegulationMusic,
+                Name = "Non regulation music",
+                PenaltyScore = -0.4m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.DifferentChoreographyFromPreviousQualifications,
+                Name = "Different choreography from previous qualifications",
+                PenaltyScore = -0.4m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.NonRegulationPropOrCostumeElement,
+                Name = "Non regulation prop or costume element",
+                PenaltyScore = -0.4m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.ThreeTieredPyramids,
+                Name = "Three tiered pyramids",
+                PenaltyScore = -3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.CategoryProhibitedElements,
+                Name = "Category prohibited elements",
+                PenaltyScore = -3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.UnjustifiedLiftsAndThrows,
+                Name = "Unjustified lifts and throws",
+                PenaltyScore = -3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.PlacingNonDedicatedPropsOnStage,
+                Name = "Placing non dedicated props on stage",
+                PenaltyScore = -3m
+            },
+            new PenaltyPoints
+            {
+                Id = (int)PenaltyType.Disqualification,
+                Name = "Disqualification",
+                PenaltyScore = -100m
+            }
         );
     }
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DancerScoringApp.Entities;
+namespace API.Entities;
 
 public class Squad
 {
@@ -18,7 +18,7 @@ public class Squad
 
 public enum PerformanceType
 {
-    Formation,
+    Formation = 1,
     MiniFormation,
     Duet,
     Solo

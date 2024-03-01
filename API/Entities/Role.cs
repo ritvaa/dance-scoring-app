@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DancerScoringApp.Entities;
+namespace API.Entities;
 
 public class Role
 {
     [Key] public int Id { get; set; }
 
-    public RoleType Name { get; set; }
+    public string Name { get; set; }
 
     #region Entity Relations
 
@@ -17,8 +17,8 @@ public class Role
 
 public enum RoleType
 {
-    SuperAdmin,
+    SuperAdmin = 1,
     Judge,
     TechnicalJudge,
-    Scrutineer
+    Scrutineer,
 }

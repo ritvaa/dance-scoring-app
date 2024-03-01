@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DancerScoringApp.Entities;
+namespace API.Entities;
 
 public class Bonus
 {
     [Key] public int Id { get; set; }
-    public BonusType Name { get; set; }
+    public string Name { get; set; }
 
     #region Entity Relations
 
@@ -16,7 +16,7 @@ public class Bonus
 
 public enum BonusType
 {
-    Originality,
+    Originality = 1,
     Synchronization,
     PerfectSynchronization,
     PresenceAndElegance

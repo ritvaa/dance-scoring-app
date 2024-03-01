@@ -1,25 +1,32 @@
-﻿//using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.EntityFrameworkCore;
-//using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.Extensions.Configuration;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 
-//namespace DanceScoringApp {
-//    public class Startup {
-//        private readonly IConfiguration _configuration;
+namespace API;
 
-//        public Startup(IConfiguration configuration) {
-//            _configuration = configuration;
-//        }
+public class Startup
+{
+    private readonly IConfiguration _configuration;
 
-//        public void ConfigureServices(IServiceCollection services) {
-//            services.AddDbContext<DancerScoringAppDbContext>(options =>
-//                options.UseNpgsql("Host=localhost;Port=5432;Database=DanceScoringApp;Username=postgres;Password=P@ssw0rd")); // Ensure correct context name
+    public Startup(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+    
+    public void ConfigureServices(IServiceCollection services) {
+        services.AddControllersWithViews();
+        services.AddControllers();
+        services.AddCors();
+        // Auto Mapper Configurations
+        var mapperConfig = new MapperConfiguration(mc =>
+        {
+            mc.AddProfile(new MapperProfiles());
+        });
 
-//        }
+        IMapper mapper = mapperConfig.CreateMapper();
+        services.AddSingleton(mapper);
 
-//        public void Configure(IApplicationBuilder app) {
-//            // Configure request pipeline here
-//        }
-//    }
-//}
+        services.AddMvc();
 
+    }
+}
