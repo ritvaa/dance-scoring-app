@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using API.Contracts;
+﻿using API.Contracts;
 using API.Entities;
 using AutoMapper;
 
-namespace API {
-    public class MapperProfiles : Profile
-    {
-        public MapperProfiles()
-        {
-            CreateMap<User, UserReadModel>();
-            CreateMap<UserWriteModel, User>();
+namespace API;
 
-        }
+public class MapperProfiles : Profile
+{
+    public MapperProfiles()
+    {
+        CreateMap<User, UserReadModel>();
+        CreateMap<UserWriteModel, User>();
+        CreateMap<Dancer, DancerReadModel>();
+        CreateMap<DancerWriteModel, Dancer>()
+            .ForMember(dest => dest.Team,
+                opt => opt.MapFrom(src => new Team { Name = src.TeamName, Location = src.TeamLocationName }));
     }
 }

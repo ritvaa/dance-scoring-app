@@ -1,0 +1,28 @@
+Need to add controller to: 
+Competitions
+Dancers
+Routines
+Squads
+Dancers
+Teams
+UserRoles
+UserCompetitions
+Categories
+Penalty Points
+Roles
+
+Tricky ones: 
+Adding Rating, and Tech Judge Rating to routines
+RatingBonuses
+
+DONE: 
+AgeCategories, 
+Bonuses
+Coaches,
+Users, 
+
+
+Add posiibility to export competition results to excel
+Add posibility to import dancers from excel
+
+Add validators

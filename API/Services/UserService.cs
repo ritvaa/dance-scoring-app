@@ -23,33 +23,39 @@ public class UserService : IUserService
         return users;
     }
 
-    public UserReadModel GetUserById(Guid id)
+    public OperationResult<UserReadModel> GetUserById(Guid id)
     {
-        var user = _dbContext.Users.Where(x => x.Id == id);
-        return _mapper.Map<UserReadModel>(user);
+        var user = _dbContext.Users.FirstOrDefault(x => x.Id == id);
+        if (user == null)
+        {
+            return OperationResult<UserReadModel>.Fail($"User with id {id} does not exist");
+        }
+
+        var userReadModel = _mapper.Map<UserReadModel>(user);
+        return OperationResult<UserReadModel>.Success(userReadModel);
     }
 
-    public ICommandResult CreateUser(UserWriteModel user)
+    public OperationResult<Guid> CreateUser(UserWriteModel user)
     {
         var existingUsername = _dbContext.Users.FirstOrDefault(x => x.Username == user.UserName);
         if (existingUsername != null)
         {
-            return CommandResult.Fail(new Conflict("User with this username already exists"));
+            return OperationResult<Guid>.Fail("User with this username already exists");
         }
 
         var existingEmail = _dbContext.Users.FirstOrDefault(x => x.Email == user.Email);
         if (existingEmail != null)
         {
-            return CommandResult.Fail(new Conflict("User with this email already exists"));
+            return OperationResult<Guid>.Fail("User with this email already exists");
         }
 
         var newUser = _mapper.Map<User>(user);
         newUser.Id = Guid.NewGuid();
-        
+    
         //todo: check this password encryption
         string hashedPassword = HashPassword(user.Password);
         newUser.Password = hashedPassword;
-        
+    
         try
         {
             _dbContext.Users.Add(newUser);
@@ -57,37 +63,47 @@ public class UserService : IUserService
         }
         catch (DbUpdateException ex)
         {
-            CommandResult.Fail(new DbError("An error occurred while adding user", ex.Message));
+            return OperationResult<Guid>.Fail("An error occurred while adding user: " + ex.Message);
         }
-        
-        return CommandResult.Success(CommandResultData.Get(newUser.Id));
+    
+        return OperationResult<Guid>.Success(newUser.Id);
     }
     
-    public UserReadModel UpdateUser(Guid id, UserWriteModel user)
+    public OperationResult<string> UpdateUser(Guid id, UserWriteModel user)
     {
         var existingUser = _dbContext.Users.FirstOrDefault(x => x.Id == id);
-        if (existingUser == null) throw new Exception("User not found");
+        if (existingUser == null) return OperationResult<string>.Fail("User does not exist");
 
         var existingUsername = _dbContext.Users.FirstOrDefault(x => x.Username == user.UserName && x.Id != id);
-        if (existingUsername != null) throw new Exception("User with this username already exists");
+        if (existingUsername != null) return OperationResult<string>.Fail("User with this username already exists");
 
         var existingEmail = _dbContext.Users.FirstOrDefault(x => x.Email == user.Email && x.Id != id);
-        if (existingEmail != null) throw new Exception("User with this email already exists");
-
-        // Mapowanie właściwości z modelu do zapisu na istniejący obiekt użytkownika
+        if (existingEmail != null) return OperationResult<string>.Fail("User with this email already exists");
+        
         _mapper.Map(user, existingUser);
 
         _dbContext.SaveChanges();
 
-        return _mapper.Map<UserReadModel>(existingUser);
+        return OperationResult<string>.Success($"User with id: {id} updated successfully");
     }
     
-    public void DeleteUser(Guid id)
+    public OperationResult<string> DeleteUser(Guid id)
     {
         var existingUser = _dbContext.Users.FirstOrDefault(x => x.Id == id);
-        if (existingUser == null) throw new Exception("User not found");
+        if (existingUser == null)
+        {
+            return OperationResult<string>.Fail("User not found");
+        }
 
-        _dbContext.Users.Remove(existingUser);
-        _dbContext.SaveChanges();
+        try
+        {
+            _dbContext.Users.Remove(existingUser);
+            _dbContext.SaveChanges();
+            return OperationResult<string>.Success($"User with id: {id} deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            return OperationResult<string>.Fail($"An error occurred while deleting user: {ex.Message}");
+        }
     }
 }

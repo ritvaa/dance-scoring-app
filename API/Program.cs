@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDancerService, DancerService>();
 
 //add controllers
 builder.Services.AddControllers().AddFluentValidation();
