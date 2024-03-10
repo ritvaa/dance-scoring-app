@@ -19,5 +19,5 @@ public enum AgeCategoryType
     Cadet = 1,
     Junior,
     Senior,
-    GrandSenior,
+    GrandSenior
 }

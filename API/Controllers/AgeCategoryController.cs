@@ -16,18 +16,18 @@ public class AgeCategoriesController : ControllerBase
         _dbContext = dbContext;
         _mapper = mapper;
     }
-    
+
     [HttpGet]
     public IEnumerable<AgeCategoryModel> Get()
     {
         var result = _mapper.Map<IEnumerable<AgeCategoryModel>>(_dbContext.AgeCategories);
         return result;
     }
-    
+
     [HttpGet("{id}")]
     public AgeCategoryModel GetById(int id)
     {
-        var result = _mapper.Map<AgeCategoryModel>(_dbContext.AgeCategories.FirstOrDefault(x=>x.Id == id));
+        var result = _mapper.Map<AgeCategoryModel>(_dbContext.AgeCategories.FirstOrDefault(x => x.Id == id));
         return result;
     }
 }

@@ -20,5 +20,5 @@ public enum RoleType
     SuperAdmin = 1,
     Judge,
     TechnicalJudge,
-    Scrutineer,
+    Scrutineer
 }

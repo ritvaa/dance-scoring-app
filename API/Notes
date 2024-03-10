@@ -1,10 +1,5 @@
 Need to add controller to: 
-Competitions
-Dancers
 Routines
-Squads
-Dancers
-Teams
 UserRoles
 UserCompetitions
 Categories
@@ -20,9 +15,15 @@ AgeCategories,
 Bonuses
 Coaches,
 Users, 
+Competitions,
+Dancers,
+Teams,
+Squads,
+
+
 
 
 Add posiibility to export competition results to excel
-Add posibility to import dancers from excel
+DONE: Add posibility to import dancers from excel
 
-Add validators
+Add validators ???

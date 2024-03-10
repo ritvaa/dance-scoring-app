@@ -1,8 +1,9 @@
 ﻿using System.Data.Entity.Infrastructure;
 using API.Contracts;
+using API.Contracts.Results;
 using API.Entities;
+using API.Services.Interfaces;
 using AutoMapper;
-using static BCrypt.Net.BCrypt;
 
 namespace API.Services;
 
@@ -19,17 +20,14 @@ public class CoachService : ICoachService
 
     public IEnumerable<CoachModel> GetAllCoaches()
     {
-        var coachs = _mapper.Map<IEnumerable<CoachModel>>(_dbContext.Coaches);
-        return coachs;
+        var coaches = _mapper.Map<IEnumerable<CoachModel>>(_dbContext.Coaches);
+        return coaches;
     }
 
     public OperationResult<CoachModel> GetCoachById(Guid id)
     {
         var coach = _dbContext.Coaches.FirstOrDefault(x => x.Id == id);
-        if (coach == null)
-        {
-            return OperationResult<CoachModel>.Fail($"Coach with id {id} does not exist");
-        }
+        if (coach == null) return OperationResult<CoachModel>.Fail($"Coach with id {id} does not exist");
 
         var coachModel = _mapper.Map<CoachModel>(coach);
         return OperationResult<CoachModel>.Success(coachModel);
@@ -37,15 +35,13 @@ public class CoachService : ICoachService
 
     public OperationResult<Guid> CreateCoach(CoachModel coach)
     {
-        var existingCoachName = _dbContext.Coaches.FirstOrDefault(x => x.FirstName == coach.FirstName && x.LastName == coach.LastName);
-        if (existingCoachName != null)
-        {
-            return OperationResult<Guid>.Fail("Coach with this name already exists");
-        }
+        var existingCoachName =
+            _dbContext.Coaches.FirstOrDefault(x => x.FirstName == coach.FirstName && x.LastName == coach.LastName);
+        if (existingCoachName != null) return OperationResult<Guid>.Fail("Coach with this name already exists");
 
         var newCoach = _mapper.Map<Coach>(coach);
         newCoach.Id = Guid.NewGuid();
-        
+
         try
         {
             _dbContext.Coaches.Add(newCoach);
@@ -55,32 +51,30 @@ public class CoachService : ICoachService
         {
             return OperationResult<Guid>.Fail("An error occurred while adding coach: " + ex.Message);
         }
-    
+
         return OperationResult<Guid>.Success(newCoach.Id);
     }
-    
+
     public OperationResult<string> UpdateCoach(Guid id, CoachModel coach)
     {
         var existingCoach = _dbContext.Coaches.FirstOrDefault(x => x.Id == id);
         if (existingCoach == null) return OperationResult<string>.Fail("Coach does not exist");
 
-        var existingCoachName = _dbContext.Coaches.FirstOrDefault(x => x.FirstName == coach.FirstName && x.LastName == coach.LastName && x.Id != id);
+        var existingCoachName = _dbContext.Coaches.FirstOrDefault(x =>
+            x.FirstName == coach.FirstName && x.LastName == coach.LastName && x.Id != id);
         if (existingCoachName != null) return OperationResult<string>.Fail("Coach with this name already exists");
-        
+
         _mapper.Map(coach, existingCoach);
 
         _dbContext.SaveChanges();
 
         return OperationResult<string>.Success($"Coach with id: {id} updated successfully");
     }
-    
+
     public OperationResult<string> DeleteCoach(Guid id)
     {
         var existingCoach = _dbContext.Coaches.FirstOrDefault(x => x.Id == id);
-        if (existingCoach == null)
-        {
-            return OperationResult<string>.Fail("Coach not found");
-        }
+        if (existingCoach == null) return OperationResult<string>.Fail("Coach not found");
 
         try
         {

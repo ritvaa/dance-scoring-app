@@ -1,6 +1,7 @@
-﻿using API.Contracts;
-using API.Entities;
+﻿using API.Entities;
 using Microsoft.EntityFrameworkCore;
+
+namespace API;
 
 public class DancerScoringAppDbContext : DbContext
 {
@@ -16,10 +17,8 @@ public class DancerScoringAppDbContext : DbContext
     }
 
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
         modelBuilder.Entity<JudgeRating>()
             .HasOne(jr => jr.Routine)
             .WithMany(r => r.JudgeRating);
@@ -33,48 +32,144 @@ public class DancerScoringAppDbContext : DbContext
         );
 
         modelBuilder.Entity<Category>().HasData(
-
-            new Category {Id = 1, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 2, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 3, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Senior },
-            new Category {Id = 4, Prop = PropType.Baton, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.GrandSenior },
-
-            new Category {Id = 5, Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 6, Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 7, Prop = PropType.Baton, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Senior },
-
-            new Category {Id = 8, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 9, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 10, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic, AgeCategoryId = (int)AgeCategoryType.Senior },
-
-            new Category {Id = 11, Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 12, Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 13, Prop = PropType.Baton, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Senior },
-
-            new Category {Id = 14, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 15, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 16, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons, AgeCategoryId = (int)AgeCategoryType.Senior },
-
-            new Category {Id = 17, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 18, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 19, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.Senior },
-            new Category {Id = 20, Prop = PropType.Pompon, CategoryType = CategoryType.Sport, AgeCategoryId = (int)AgeCategoryType.GrandSenior },
-                          
-            new Category {Id = 21, Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 22, Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 23, Prop = PropType.Pompon, CategoryType = CategoryType.Classic, AgeCategoryId = (int)AgeCategoryType.Senior },
-                         
-            new Category {Id = 24, Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Cadet },
-            new Category {Id = 25, Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Junior },
-            new Category {Id = 26, Prop = PropType.Pompon, CategoryType = CategoryType.Basic, AgeCategoryId = (int)AgeCategoryType.Senior }
+            new Category
+            {
+                Id = 1, Prop = PropType.Baton, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 2, Prop = PropType.Baton, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 3, Prop = PropType.Baton, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            },
+            new Category
+            {
+                Id = 4, Prop = PropType.Baton, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.GrandSenior
+            },
+            new Category
+            {
+                Id = 5, Prop = PropType.Baton, CategoryType = CategoryType.Classic,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 6, Prop = PropType.Baton, CategoryType = CategoryType.Classic,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 7, Prop = PropType.Baton, CategoryType = CategoryType.Classic,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            },
+            new Category
+            {
+                Id = 8, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 9, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 10, Prop = PropType.Baton, CategoryType = CategoryType.Acrobatic,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            },
+            new Category
+            {
+                Id = 11, Prop = PropType.Baton, CategoryType = CategoryType.Basic,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 12, Prop = PropType.Baton, CategoryType = CategoryType.Basic,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 13, Prop = PropType.Baton, CategoryType = CategoryType.Basic,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            },
+            new Category
+            {
+                Id = 14, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 15, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 16, Prop = PropType.Baton, CategoryType = CategoryType.TwoBatons,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            },
+            new Category
+            {
+                Id = 17, Prop = PropType.Pompon, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 18, Prop = PropType.Pompon, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 19, Prop = PropType.Pompon, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            },
+            new Category
+            {
+                Id = 20, Prop = PropType.Pompon, CategoryType = CategoryType.Sport,
+                AgeCategoryId = (int)AgeCategoryType.GrandSenior
+            },
+            new Category
+            {
+                Id = 21, Prop = PropType.Pompon, CategoryType = CategoryType.Classic,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 22, Prop = PropType.Pompon, CategoryType = CategoryType.Classic,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 23, Prop = PropType.Pompon, CategoryType = CategoryType.Classic,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            },
+            new Category
+            {
+                Id = 24, Prop = PropType.Pompon, CategoryType = CategoryType.Basic,
+                AgeCategoryId = (int)AgeCategoryType.Cadet
+            },
+            new Category
+            {
+                Id = 25, Prop = PropType.Pompon, CategoryType = CategoryType.Basic,
+                AgeCategoryId = (int)AgeCategoryType.Junior
+            },
+            new Category
+            {
+                Id = 26, Prop = PropType.Pompon, CategoryType = CategoryType.Basic,
+                AgeCategoryId = (int)AgeCategoryType.Senior
+            }
         );
 
 
         modelBuilder.Entity<Bonus>().HasData(
-            new Bonus { Id = (int) BonusType.Originality, Name = "Orginality" },
-            new Bonus { Id = (int) BonusType.Synchronization, Name = "Sychronization"},
-            new Bonus { Id = (int) BonusType.PerfectSynchronization, Name = "Perfect Synchronization"},
-            new Bonus { Id = (int) BonusType.PresenceAndElegance, Name = "Presence and Elegance" }
+            new Bonus { Id = (int)BonusType.Originality, Name = "Orginality" },
+            new Bonus { Id = (int)BonusType.Synchronization, Name = "Sychronization" },
+            new Bonus { Id = (int)BonusType.PerfectSynchronization, Name = "Perfect Synchronization" },
+            new Bonus { Id = (int)BonusType.PresenceAndElegance, Name = "Presence and Elegance" }
         );
 
         modelBuilder.Entity<Role>()
@@ -82,10 +177,10 @@ public class DancerScoringAppDbContext : DbContext
             .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Role>().HasData(
-            new Role { Id = (int) RoleType.SuperAdmin, Name = "Super Admin"},
-            new Role { Id = (int) RoleType.Judge, Name = "Judge" },
-            new Role { Id = (int) RoleType.TechnicalJudge, Name = "Technical Judge" },
-            new Role { Id = (int) RoleType.Scrutineer, Name = "Scrutineer" }
+            new Role { Id = (int)RoleType.SuperAdmin, Name = "Super Admin" },
+            new Role { Id = (int)RoleType.Judge, Name = "Judge" },
+            new Role { Id = (int)RoleType.TechnicalJudge, Name = "Technical Judge" },
+            new Role { Id = (int)RoleType.Scrutineer, Name = "Scrutineer" }
         );
 
 

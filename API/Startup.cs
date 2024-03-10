@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using API.Profiles;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace API;
@@ -12,21 +13,18 @@ public class Startup
     {
         _configuration = configuration;
     }
-    
-    public void ConfigureServices(IServiceCollection services) {
+
+    public void ConfigureServices(IServiceCollection services)
+    {
         services.AddControllersWithViews();
         services.AddControllers();
         services.AddCors();
         // Auto Mapper Configurations
-        var mapperConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new MapperProfiles());
-        });
+        var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MapperProfiles()); });
 
-        IMapper mapper = mapperConfig.CreateMapper();
+        var mapper = mapperConfig.CreateMapper();
         services.AddSingleton(mapper);
 
         services.AddMvc();
-
     }
 }

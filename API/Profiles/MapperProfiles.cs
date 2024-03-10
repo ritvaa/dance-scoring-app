@@ -2,7 +2,7 @@
 using API.Entities;
 using AutoMapper;
 
-namespace API;
+namespace API.Profiles;
 
 public class MapperProfiles : Profile
 {

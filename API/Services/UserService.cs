@@ -1,6 +1,8 @@
 ﻿using System.Data.Entity.Infrastructure;
 using API.Contracts;
+using API.Contracts.Results;
 using API.Entities;
+using API.Services.Interfaces;
 using AutoMapper;
 using static BCrypt.Net.BCrypt;
 
@@ -26,10 +28,7 @@ public class UserService : IUserService
     public OperationResult<UserReadModel> GetUserById(Guid id)
     {
         var user = _dbContext.Users.FirstOrDefault(x => x.Id == id);
-        if (user == null)
-        {
-            return OperationResult<UserReadModel>.Fail($"User with id {id} does not exist");
-        }
+        if (user == null) return OperationResult<UserReadModel>.Fail($"User with id {id} does not exist");
 
         var userReadModel = _mapper.Map<UserReadModel>(user);
         return OperationResult<UserReadModel>.Success(userReadModel);
@@ -38,24 +37,18 @@ public class UserService : IUserService
     public OperationResult<Guid> CreateUser(UserWriteModel user)
     {
         var existingUsername = _dbContext.Users.FirstOrDefault(x => x.Username == user.UserName);
-        if (existingUsername != null)
-        {
-            return OperationResult<Guid>.Fail("User with this username already exists");
-        }
+        if (existingUsername != null) return OperationResult<Guid>.Fail("User with this username already exists");
 
         var existingEmail = _dbContext.Users.FirstOrDefault(x => x.Email == user.Email);
-        if (existingEmail != null)
-        {
-            return OperationResult<Guid>.Fail("User with this email already exists");
-        }
+        if (existingEmail != null) return OperationResult<Guid>.Fail("User with this email already exists");
 
         var newUser = _mapper.Map<User>(user);
         newUser.Id = Guid.NewGuid();
-    
+
         //todo: check this password encryption
-        string hashedPassword = HashPassword(user.Password);
+        var hashedPassword = HashPassword(user.Password);
         newUser.Password = hashedPassword;
-    
+
         try
         {
             _dbContext.Users.Add(newUser);
@@ -65,10 +58,10 @@ public class UserService : IUserService
         {
             return OperationResult<Guid>.Fail("An error occurred while adding user: " + ex.Message);
         }
-    
+
         return OperationResult<Guid>.Success(newUser.Id);
     }
-    
+
     public OperationResult<string> UpdateUser(Guid id, UserWriteModel user)
     {
         var existingUser = _dbContext.Users.FirstOrDefault(x => x.Id == id);
@@ -79,21 +72,18 @@ public class UserService : IUserService
 
         var existingEmail = _dbContext.Users.FirstOrDefault(x => x.Email == user.Email && x.Id != id);
         if (existingEmail != null) return OperationResult<string>.Fail("User with this email already exists");
-        
+
         _mapper.Map(user, existingUser);
 
         _dbContext.SaveChanges();
 
         return OperationResult<string>.Success($"User with id: {id} updated successfully");
     }
-    
+
     public OperationResult<string> DeleteUser(Guid id)
     {
         var existingUser = _dbContext.Users.FirstOrDefault(x => x.Id == id);
-        if (existingUser == null)
-        {
-            return OperationResult<string>.Fail("User not found");
-        }
+        if (existingUser == null) return OperationResult<string>.Fail("User not found");
 
         try
         {
