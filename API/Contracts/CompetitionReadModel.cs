@@ -7,5 +7,5 @@ public class CompetitionReadModel
     public DateTime StartDate { get; set; }
     public string Location { get; set; }
     public IEnumerable<UserReadModel> Users { get; set; }
-    public IEnumerable<RoutineModel> Routines { get; set; }
+    public IEnumerable<RoutineWriteModel> Routines { get; set; }
 }

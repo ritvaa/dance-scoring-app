@@ -99,4 +99,36 @@ public class CompetitionService : ICompetitionService
             return OperationResult<string>.Fail($"An error occurred while deleting dancer: {ex.Message}");
         }
     }
+
+    public OperationResult<string> AddUsersToCompetition(Guid competitionId, List<Guid> userIds)
+    {
+        var userCompetitions = new List<UserCompetition>();
+        var existingCompetition = _dbContext.Competitions.FirstOrDefault(x => x.Id == competitionId);
+        if (existingCompetition == null) return OperationResult<string>.Fail("Competition not found");
+
+        foreach (var userId in userIds)
+        {
+            var existingUser = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+            if (existingUser == null) return OperationResult<string>.Fail($"User with id: {userId} not found");
+
+            var userCompetition = new UserCompetition
+            {
+                UserId = userId,
+                CompetitionId = competitionId
+            };
+            userCompetitions.Add(userCompetition);
+        }
+        try
+        {
+            _dbContext.UserCompetitions.AddRange(userCompetitions);
+            _dbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex)
+        {
+            return OperationResult<string>.Fail("An error occurred while adding user to competition: " + ex.Message);
+        }
+        
+        var message = userIds.Count > 1 ? "Users are added to competition" : "User is added to competition";
+        return OperationResult<string>.Success(message);
+    }
 }

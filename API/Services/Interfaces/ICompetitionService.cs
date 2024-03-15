@@ -10,4 +10,5 @@ public interface ICompetitionService
     OperationResult<Guid> CreateCompetition(CompetitionReadModel user);
     OperationResult<string> UpdateCompetition(Guid id, CompetitionReadModel user);
     OperationResult<string> DeleteCompetition(Guid id);
+    OperationResult<string> AddUsersToCompetition(Guid competitionId, List<Guid> userIds);
 }

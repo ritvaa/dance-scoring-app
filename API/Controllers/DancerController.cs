@@ -32,17 +32,17 @@ public class DancerController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateDancer(DancerReadModel dancerRead)
+    public IActionResult CreateDancer(DancerWriteModel dancer)
     {
-        var result = _dancerService.CreateDancer(dancerRead);
+        var result = _dancerService.CreateDancer(dancer);
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }
 
     [HttpPut("{id}")]
-    public ActionResult<DancerReadModel> Update(Guid id, DancerReadModel updatedDancerRead)
+    public ActionResult<DancerReadModel> Update(Guid id, DancerWriteModel dancer)
     {
-        var result = _dancerService.UpdateDancer(id, updatedDancerRead);
+        var result = _dancerService.UpdateDancer(id, dancer);
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }

@@ -5,7 +5,7 @@ namespace API;
 
 public class DancerScoringAppDbContext : DbContext
 {
-    public DancerScoringAppDbContext(DbContextOptions<DancerScoringAppDbContext> options)
+    public DancerScoringAppDbContext(DbContextOptions<DancerScoringAppDbContext> options, DbSet<AgeCategory> ageCategories, DbSet<Bonus> bonuses, DbSet<Category> categories, DbSet<Coach> coaches, DbSet<Competition> competitions, DbSet<Dancer> dancers, DbSet<JudgeRating> judgeRatings, DbSet<PenaltyPoints> penaltyPoints, DbSet<PenaltyPointsRating> penaltyPointsRatings, DbSet<RatingBonus> ratingBonuses, DbSet<Role> roles, DbSet<Routine> routines, DbSet<Squad> squads, DbSet<SquadDancer> squadDancers, DbSet<Team> teams, DbSet<TeamCoach> teamCoaches, DbSet<TechJudgeRating> techJudgeRatings, DbSet<User> users, DbSet<UserCompetition> userCompetitions, DbSet<UserRole> userRoles)
         : base(options)
     {
     }

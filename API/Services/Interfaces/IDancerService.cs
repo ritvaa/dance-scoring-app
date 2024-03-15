@@ -7,8 +7,8 @@ public interface IDancerService
 {
     IEnumerable<DancerReadModel> GetAllDancers();
     OperationResult<DancerReadModel> GetDancerById(Guid id);
-    OperationResult<Guid> CreateDancer(DancerReadModel dancerRead);
-    OperationResult<string> UpdateDancer(Guid id, DancerReadModel updatedDancerRead);
+    OperationResult<Guid> CreateDancer(DancerWriteModel dancerRead);
+    OperationResult<string> UpdateDancer(Guid id, DancerWriteModel dancer);
     OperationResult<string> DeleteDancer(Guid id);
     OperationResult<IEnumerable<DancerReadModel>> ImportDancersFromCsv(Stream excelStream);
 }

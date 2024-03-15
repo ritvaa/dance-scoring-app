@@ -53,4 +53,14 @@ public class CompetitionController : ControllerBase
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }
+    
+    //todo send email to dancers after finished competition
+    
+    [HttpPost("competition/{competitionId}/users/{userIds}")] //wtf is this 
+    public IActionResult AddUsersToCompetition(Guid competitionId, List<Guid> userIds)
+    {
+        var result = _competitionService.AddUsersToCompetition(competitionId, userIds);
+        if (result.IsSuccess) return Ok(result.Data);
+        return Conflict(result.ErrorMessage);
+    }
 }

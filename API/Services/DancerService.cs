@@ -36,15 +36,16 @@ public class DancerService : IDancerService
         return OperationResult<DancerReadModel>.Success(dancerModel);
     }
 
-    public OperationResult<Guid> CreateDancer(DancerReadModel dancerRead)
+    public OperationResult<Guid> CreateDancer(DancerWriteModel dancer)
     {
         var existingDancer = _dbContext.Dancers.FirstOrDefault(x =>
-            x.FullName == dancerRead.FullName
-            && x.LicenceId == dancerRead.LicenceId);
+            x.FirstName == dancer.FirstName
+            && x.LastName == dancer.LastName
+            && x.LicenceId == dancer.LicenceId);
         if (existingDancer != null)
             return OperationResult<Guid>.Fail("Dancer with this name and licence ID already exists");
 
-        var newDancer = _mapper.Map<Dancer>(dancerRead);
+        var newDancer = _mapper.Map<Dancer>(dancer);
         newDancer.Id = Guid.NewGuid();
 
         try
@@ -60,7 +61,7 @@ public class DancerService : IDancerService
         return OperationResult<Guid>.Success(newDancer.Id);
     }
 
-    public OperationResult<string> UpdateDancer(Guid id, DancerReadModel dancerRead)
+    public OperationResult<string> UpdateDancer(Guid id, DancerWriteModel dancer)
     {
         var existingDancer = _dbContext.Dancers.FirstOrDefault(x => x.Id == id);
         if (existingDancer == null) return OperationResult<string>.Fail("Dancer does not exist");
@@ -68,10 +69,10 @@ public class DancerService : IDancerService
         // var existingUsername = _dbContext.Dancers.FirstOrDefault(x => x.Username == dancer.UserName && x.Id != id);
         // if (existingUsername != null) return OperationResult<string>.Fail("Dancer with this username already exists");
 
-        var existingEmail = _dbContext.Dancers.FirstOrDefault(x => x.Email == dancerRead.Email && x.Id != id);
+        var existingEmail = _dbContext.Dancers.FirstOrDefault(x => x.Email == dancer.Email && x.Id != id);
         if (existingEmail != null) return OperationResult<string>.Fail("Dancer with this email already exists");
 
-        _mapper.Map(dancerRead, existingDancer);
+        _mapper.Map(dancer, existingDancer);
 
         _dbContext.SaveChanges();
 
@@ -114,12 +115,11 @@ public class DancerService : IDancerService
                 foreach (var record in records) dancers.Add(record);
             }
 
-            foreach (var dancer in dancers) dancer.Id = Guid.NewGuid();
-
             var dancerEntities = _mapper.Map<List<Dancer>>(dancers);
-
+            
             foreach (var dancer in dancerEntities)
             {
+                dancer.Id = Guid.NewGuid();
                 if (!string.IsNullOrEmpty(dancer.Team.Name))
                 {
                     var team = _dbContext.Teams.FirstOrDefault(t => t.Name == dancer.Team.Name);

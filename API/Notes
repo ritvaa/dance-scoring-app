@@ -1,10 +1,10 @@
 Need to add controller to: 
-Routines
 UserRoles
 UserCompetitions
 Categories
 Penalty Points
-Roles
+Roles,
+GetScoreSheet - for scourtiners 
 
 Tricky ones: 
 Adding Rating, and Tech Judge Rating to routines
@@ -19,6 +19,8 @@ Competitions,
 Dancers,
 Teams,
 Squads,
+Routines,
+
 
 
 
@@ -27,3 +29,8 @@ Add posiibility to export competition results to excel
 DONE: Add posibility to import dancers from excel
 
 Add validators ???
+
+Dodać opcję, aby co jakiś czas w aplikacji te ratingi sie odświeżały, żeby sędziowie mieli wgląd
+ (najlepiej po tym jak wszyscy sędziowie zatwierdzą oceny)
+ 
+ 
