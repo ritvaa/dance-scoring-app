@@ -1,10 +1,7 @@
 Need to add controller to: 
-Routines
-UserRoles
-UserCompetitions
-Categories
-Penalty Points
-Roles
+
+
+Roles ???
 
 Tricky ones: 
 Adding Rating, and Tech Judge Rating to routines
@@ -19,7 +16,11 @@ Competitions,
 Dancers,
 Teams,
 Squads,
-
+Routines,
+UserCompetitions,
+UserRoles
+Categories
+Penalty Points
 
 
 
@@ -27,3 +28,5 @@ Add posiibility to export competition results to excel
 DONE: Add posibility to import dancers from excel
 
 Add validators ???
+
+Dlaczego nie używa się konstruktorów w modelach? 

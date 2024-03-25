@@ -47,7 +47,7 @@ public class CoachController : ControllerBase
         return Conflict(result.ErrorMessage);
     }
 
-    [HttpPost]
+    [HttpDelete("{id}")]
     public IActionResult DeleteCoach(Guid id)
     {
         var result = _coachService.DeleteCoach(id);

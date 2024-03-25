@@ -18,28 +18,28 @@ public class TeamService : ITeamService
         _mapper = mapper;
     }
 
-    public IEnumerable<TeamModel> GetAllTeams()
+    public IEnumerable<TeamReadModel> GetAllTeams()
     {
-        var teams = _mapper.Map<IEnumerable<TeamModel>>(_dbContext.Teams);
+        var teams = _mapper.Map<IEnumerable<TeamReadModel>>(_dbContext.Teams);
         return teams;
     }
 
-    public OperationResult<TeamModel> GetTeamById(Guid id)
+    public OperationResult<TeamReadModel> GetTeamById(Guid id)
     {
         var team = _dbContext.Teams.FirstOrDefault(x => x.Id == id);
-        if (team == null) return OperationResult<TeamModel>.Fail($"Team with id {id} does not exist");
+        if (team == null) return OperationResult<TeamReadModel>.Fail($"Team with id {id} does not exist");
 
-        var teamModel = _mapper.Map<TeamModel>(team);
-        return OperationResult<TeamModel>.Success(teamModel);
+        var teamModel = _mapper.Map<TeamReadModel>(team);
+        return OperationResult<TeamReadModel>.Success(teamModel);
     }
 
-    public OperationResult<Guid> CreateTeam(TeamModel team)
+    public OperationResult<Guid> CreateTeam(TeamWriteModel teamWrite)
     {
-        var existingTeamName = _dbContext.Teams.FirstOrDefault(x => x.Name == team.Name && x.Location == team.Location);
+        var existingTeamName = _dbContext.Teams.FirstOrDefault(x => x.Name == teamWrite.Name && x.Location == teamWrite.Location);
         if (existingTeamName != null)
             return OperationResult<Guid>.Fail("Team with this name and location already exists");
 
-        var newTeam = _mapper.Map<Team>(team);
+        var newTeam = _mapper.Map<Team>(teamWrite);
         newTeam.Id = Guid.NewGuid();
 
         try
@@ -55,16 +55,16 @@ public class TeamService : ITeamService
         return OperationResult<Guid>.Success(newTeam.Id);
     }
 
-    public OperationResult<string> UpdateTeam(Guid id, TeamModel team)
+    public OperationResult<string> UpdateTeam(Guid id, TeamWriteModel teamWrite)
     {
         var existingTeam = _dbContext.Teams.FirstOrDefault(x => x.Id == id);
         if (existingTeam == null) return OperationResult<string>.Fail("Team does not exist");
 
-        var existingTeamName = _dbContext.Teams.FirstOrDefault(x => x.Name == team.Name && x.Location == team.Location);
+        var existingTeamName = _dbContext.Teams.FirstOrDefault(x => x.Name == teamWrite.Name && x.Location == teamWrite.Location);
         if (existingTeamName != null)
             return OperationResult<string>.Fail("Team with this name and location already exists");
 
-        _mapper.Map(team, existingTeam);
+        _mapper.Map(teamWrite, existingTeam);
 
         _dbContext.SaveChanges();
 

@@ -46,7 +46,7 @@ public class UserController : ControllerBase
         return Conflict(result.ErrorMessage);
     }
 
-    [HttpPost]
+    [HttpDelete("{id}")]
     public IActionResult DeleteUser(Guid id)
     {
         var result = _userService.DeleteUser(id);

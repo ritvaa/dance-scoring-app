@@ -18,16 +18,16 @@ public class BonusController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<BonusModel> Get()
+    public IEnumerable<BonusReadModel> Get()
     {
-        var result = _mapper.Map<IEnumerable<BonusModel>>(_dbContext.Bonuses);
+        var result = _mapper.Map<IEnumerable<BonusReadModel>>(_dbContext.Bonuses);
         return result;
     }
 
     [HttpGet("{id}")]
-    public BonusModel GetById(int id)
+    public BonusReadModel GetById(int id)
     {
-        var result = _mapper.Map<BonusModel>(_dbContext.Bonuses.FirstOrDefault(x => x.Id == id));
+        var result = _mapper.Map<BonusReadModel>(_dbContext.Bonuses.FirstOrDefault(x => x.Id == id));
         return result;
     }
 }

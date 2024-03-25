@@ -31,26 +31,42 @@ public class CompetitionController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateCompetition(CompetitionReadModel competitionRead)
+    public async Task<IActionResult> CreateCompetition([FromBody] CompetitionWriteModel competition)
     {
-        var result = _competitionService.CreateCompetition(competitionRead);
+        var result = await _competitionService.CreateCompetition(competition);
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }
 
     [HttpPut("{id}")]
-    public ActionResult<CompetitionReadModel> Update(Guid id, CompetitionReadModel updatedCompetitionRead)
+    public async Task<ActionResult<CompetitionReadModel>> Update(Guid id, CompetitionReadModel updatedCompetitionRead)
     {
-        var result = _competitionService.UpdateCompetition(id, updatedCompetitionRead);
+        var result = await _competitionService.UpdateCompetition(id, updatedCompetitionRead);
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteCompetition(Guid id)
+    public async Task<IActionResult> DeleteCompetition(Guid id)
     {
-        var result = _competitionService.DeleteCompetition(id);
+        var result = await _competitionService.DeleteCompetition(id);
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }
+    
+    [HttpPost("/addUsersToCompetition/{competitionId}")]
+    public async Task<IActionResult> AddUserToCompetition(Guid competitionId, [FromBody] IEnumerable<Guid> userIds)
+    {
+        var result = await _competitionService.AddUserToCompetition(competitionId, userIds);
+        if (result.IsSuccess) return Ok(result.Data);
+        return Conflict(result.ErrorMessage);
+    }
+    
+    [HttpGet("/getUserCompetitions")]
+    public ActionResult<IEnumerable<CompetitionReadModel>> Get(Guid userId)
+    {
+        var competitions = _competitionService.GetAllUserCompetitions(userId);
+        return Ok(competitions);
+    }
+    
 }

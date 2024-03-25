@@ -5,9 +5,9 @@ namespace API.Services.Interfaces;
 
 public interface ITeamService
 {
-    IEnumerable<TeamModel> GetAllTeams();
-    OperationResult<TeamModel> GetTeamById(Guid id);
-    OperationResult<Guid> CreateTeam(TeamModel team);
-    OperationResult<string> UpdateTeam(Guid id, TeamModel team);
+    IEnumerable<TeamReadModel> GetAllTeams();
+    OperationResult<TeamReadModel> GetTeamById(Guid id);
+    OperationResult<Guid> CreateTeam(TeamWriteModel teamWrite);
+    OperationResult<string> UpdateTeam(Guid id, TeamWriteModel teamWrite);
     OperationResult<string> DeleteTeam(Guid id);
 }

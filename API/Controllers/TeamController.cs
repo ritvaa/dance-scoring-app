@@ -16,14 +16,14 @@ public class TeamController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<TeamModel>> Get()
+    public ActionResult<IEnumerable<TeamReadModel>> Get()
     {
         var teams = _teamService.GetAllTeams();
         return Ok(teams);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<TeamModel> GetById(Guid id)
+    public ActionResult<TeamReadModel> GetById(Guid id)
     {
         var result = _teamService.GetTeamById(id);
         if (result.IsSuccess) return Ok(result.Data);
@@ -31,23 +31,23 @@ public class TeamController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateTeam(TeamModel team)
+    public IActionResult CreateTeam(TeamWriteModel teamWrite)
     {
-        var result = _teamService.CreateTeam(team);
+        var result = _teamService.CreateTeam(teamWrite);
 
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }
 
     [HttpPut("{id}")]
-    public ActionResult<TeamModel> Update(Guid id, TeamModel updatedTeam)
+    public ActionResult<TeamWriteModel> Update(Guid id, TeamWriteModel updatedTeamWrite)
     {
-        var result = _teamService.UpdateTeam(id, updatedTeam);
+        var result = _teamService.UpdateTeam(id, updatedTeamWrite);
         if (result.IsSuccess) return Ok(result.Data);
         return Conflict(result.ErrorMessage);
     }
 
-    [HttpPost]
+    [HttpDelete("{id}")]
     public IActionResult DeleteTeam(Guid id)
     {
         var result = _teamService.DeleteTeam(id);

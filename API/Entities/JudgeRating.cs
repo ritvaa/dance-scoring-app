@@ -7,7 +7,7 @@ public class JudgeRating
     [Key] public Guid Id { get; set; }
     public decimal ChoreographyPoints { get; set; }
     public decimal BodyTechniquePoints { get; set; }
-    public decimal PropWorkPoints { get; set; }
+    public decimal RequisiteWorkPoints { get; set; }
     public string Comment { get; set; } = string.Empty;
     public bool HasBonus { get; set; }
 

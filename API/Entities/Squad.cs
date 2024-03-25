@@ -6,7 +6,7 @@ public class Squad
 {
     [Key] public Guid Id { get; set; }
 
-    public PerformanceType PerformanceType { get; set; }
+    public SquadType SquadType { get; set; }
 
     #region Entity Relations
 
@@ -16,10 +16,10 @@ public class Squad
     #endregion
 }
 
-public enum PerformanceType
+public enum SquadType
 {
     Formation = 1,
     MiniFormation,
-    Duet,
+    DuoTrio,
     Solo
 }

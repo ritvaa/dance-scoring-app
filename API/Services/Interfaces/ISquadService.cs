@@ -5,9 +5,11 @@ namespace API.Services.Interfaces;
 
 public interface ISquadService
 {
-    IEnumerable<SquadModel> GetSquads(Guid teamId);
-    OperationResult<SquadModel> GetSquadById(Guid teamId, Guid id);
-    OperationResult<Guid> CreateSquad(SquadModel squad);
-    OperationResult<string> UpdateSquad(Guid id, SquadModel squad);
+    IEnumerable<SquadReadModel> GetSquads(Guid teamId);
+    OperationResult<SquadReadModel> GetSquadById(Guid teamId, Guid id);
+    OperationResult<Guid> CreateSquad(SquadWriteModel squad);
+    OperationResult<string> UpdateSquad(Guid id, SquadWriteModel squad);
     OperationResult<string> DeleteSquad(Guid id);
+    Task<OperationResult<string>> AddDancerToSquad(Guid squadId, List<Guid> dancerIds);
+    
 }

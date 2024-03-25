@@ -3,7 +3,7 @@ using API.Contracts.Results;
 
 namespace API.Services.Interfaces;
 
-public interface ICoachService //: IBaseService<CoachModel>
+public interface ICoachService
 {
     IEnumerable<CoachModel> GetAllCoaches();
     OperationResult<CoachModel> GetCoachById(Guid id);

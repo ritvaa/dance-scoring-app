@@ -1,5 +1,4 @@
-﻿using System.Data.Entity.Infrastructure;
-using System.Globalization;
+﻿using System.Globalization;
 using API.Contracts;
 using API.Contracts.Results;
 using API.Entities;
@@ -7,6 +6,8 @@ using API.Services.Interfaces;
 using AutoMapper;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.EntityFrameworkCore;
+using DbUpdateException = System.Data.Entity.Infrastructure.DbUpdateException;
 
 namespace API.Services;
 
@@ -23,29 +24,38 @@ public class DancerService : IDancerService
 
     public IEnumerable<DancerReadModel> GetAllDancers()
     {
-        var dancers = _mapper.Map<IEnumerable<DancerReadModel>>(_dbContext.Dancers);
-        return dancers;
+        //var dancers = _mapper.Map<IEnumerable<DancerReadModel>>(_dbContext.Dancers.Include(d => d.Team));
+        var dancers = _dbContext.Dancers.Include(d => d.Team);
+
+
+        return _mapper.Map<IEnumerable<DancerReadModel>>(dancers);
     }
 
     public OperationResult<DancerReadModel> GetDancerById(Guid id)
     {
-        var dancer = _dbContext.Dancers.FirstOrDefault(x => x.Id == id);
+        var dancer = _dbContext.Dancers.Include(x=>x.Team)
+            .FirstOrDefault(x => x.Id == id);
         if (dancer == null) return OperationResult<DancerReadModel>.Fail($"Dancer with id {id} does not exist");
 
         var dancerModel = _mapper.Map<DancerReadModel>(dancer);
         return OperationResult<DancerReadModel>.Success(dancerModel);
     }
 
-    public OperationResult<Guid> CreateDancer(DancerReadModel dancerRead)
+    public OperationResult<Guid> CreateDancer(DancerWriteModel dancer)
     {
         var existingDancer = _dbContext.Dancers.FirstOrDefault(x =>
-            x.FullName == dancerRead.FullName
-            && x.LicenceId == dancerRead.LicenceId);
+            x.FirstName == dancer.FirstName
+            && x.LastName == dancer.LastName
+            && x.LicenceId == dancer.LicenceId);
         if (existingDancer != null)
             return OperationResult<Guid>.Fail("Dancer with this name and licence ID already exists");
 
-        var newDancer = _mapper.Map<Dancer>(dancerRead);
+        var newDancer = _mapper.Map<Dancer>(dancer);
         newDancer.Id = Guid.NewGuid();
+
+        var existingTeam =
+            _dbContext.Teams.FirstOrDefault(x => x.Name == dancer.TeamName && x.Location == dancer.TeamLocationName);
+        if (existingTeam != null) newDancer.Team = existingTeam;
 
         try
         {
@@ -60,13 +70,10 @@ public class DancerService : IDancerService
         return OperationResult<Guid>.Success(newDancer.Id);
     }
 
-    public OperationResult<string> UpdateDancer(Guid id, DancerReadModel dancerRead)
+    public OperationResult<string> UpdateDancer(Guid id, DancerWriteModel dancerRead)
     {
         var existingDancer = _dbContext.Dancers.FirstOrDefault(x => x.Id == id);
         if (existingDancer == null) return OperationResult<string>.Fail("Dancer does not exist");
-
-        // var existingUsername = _dbContext.Dancers.FirstOrDefault(x => x.Username == dancer.UserName && x.Id != id);
-        // if (existingUsername != null) return OperationResult<string>.Fail("Dancer with this username already exists");
 
         var existingEmail = _dbContext.Dancers.FirstOrDefault(x => x.Email == dancerRead.Email && x.Id != id);
         if (existingEmail != null) return OperationResult<string>.Fail("Dancer with this email already exists");
@@ -99,7 +106,7 @@ public class DancerService : IDancerService
     {
         try
         {
-            var dancers = new List<DancerWriteModel>();
+            var dancers = new List<DancerImportModel>();
             var addedDancers = new List<Dancer>();
 
             using (var reader = new StreamReader(csvStream))
@@ -109,7 +116,7 @@ public class DancerService : IDancerService
                        MissingFieldFound = null
                    }))
             {
-                var records = csvReader.GetRecords<DancerWriteModel>();
+                var records = csvReader.GetRecords<DancerImportModel>();
 
                 foreach (var record in records) dancers.Add(record);
             }

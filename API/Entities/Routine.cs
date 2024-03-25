@@ -13,8 +13,9 @@ public class Routine
 
     public virtual Category Category { get; set; }
     public virtual Squad Squad { get; set; }
-    public virtual TechJudgeRating TechJudgeRating { get; set; }
+    public virtual ICollection<TechJudgeRating> TechJudgeRating { get; set; }
     public virtual ICollection<JudgeRating> JudgeRating { get; set; }
+    public virtual Competition Competition { get; set; }
 
     #endregion
 }
