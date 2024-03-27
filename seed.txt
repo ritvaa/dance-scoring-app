@@ -1,0 +1,62 @@
+dancer: 
+
+ab8aec77-b910-44fa-8a54-2d936dd98e7c
+
+
+team: 
+
+facfdc5e-bf2d-431e-8406-0ef9471c6500
+
+
+squad: 
+
+09e4b4af-0bcf-452e-b9b9-3fa94cc58213
+
+
+routine: 
+
+3515daed-8bf8-4ac6-85a0-7c05e93e2055
+
+user: 
+
+3515daed-8bf8-4ac6-85a0-7c05e93e2054
+
+
+
+INSERT INTO "Users" ("Id", "FirstName", "LastName", "Email", "Password", "Username")
+VALUES ('3515daed-8bf8-4ac6-85a0-7c05e93e2054', 'John', 'Doe', 'johndoe@example.com', 'hashed_password', 'johndoe');
+
+INSERT INTO "UserRoles" ("Id", "UserId", "RoleId")
+VALUES ('82a3c357-6085-4098-92dd-63769902f35e', '3515daed-8bf8-4ac6-85a0-7c05e93e2054', 2); 
+
+INSERT INTO "UserRoles" ("Id", "UserId", "RoleId")
+VALUES ('0d6dadb2-a9b1-424e-8947-65b9f9de4be4', '3515daed-8bf8-4ac6-85a0-7c05e93e2054', 3); 
+
+INSERT INTO "Competitions" ("Id", "Name", "StartDate", "EndDate", "Location")
+VALUES ('f99b8aac-1e20-4a0b-ad53-1a1704907555', 'National Dance Championship', '2024-05-10', '2024-05-12', 'Grand Arena');
+
+
+INSERT INTO "Teams" ("Id", "Name", "Location")
+VALUES ('facfdc5e-bf2d-431e-8406-0ef9471c6500', 'Aplauz', 'Marklowice');
+
+INSERT INTO "Dancers" ("Id", "FirstName", "LastName", "Email", "PhoneNumber", "DateOfBirth", "LicenceId", "TeamId")
+VALUES ('ab8aec77-b910-44fa-8a54-2d936dd98e7c', 'Alice', 'Johnson', 'alicejohnson@example.com', '+1234567890', '1998-01-01', 'DANCE-LIC-1234', 'facfdc5e-bf2d-431e-8406-0ef9471c6500');
+
+INSERT INTO "Dancers" ("Id", "FirstName", "LastName", "Email", "PhoneNumber", "DateOfBirth", "LicenceId", "TeamId")
+VALUES ('b629a0da-2adf-495d-82e0-55182e6ca016', 'Bob', 'Williams', 'bobwilliams@example.com', '+9876543210', '2000-07-15', 'DANCE-LIC-5678', 'facfdc5e-bf2d-431e-8406-0ef9471c6500');
+
+INSERT INTO "Squads" ("Id", "SquadType", "TeamId")
+VALUES ('09e4b4af-0bcf-452e-b9b9-3fa94cc58213', 4, 'facfdc5e-bf2d-431e-8406-0ef9471c6500');
+
+INSERT INTO "SquadDancers" ("Id", "SquadId", "DancerId")
+VALUES ('61d88b26-1f32-482a-aab0-18866d8f6ee9', '09e4b4af-0bcf-452e-b9b9-3fa94cc58213', 'ab8aec77-b910-44fa-8a54-2d936dd98e7c');
+
+INSERT INTO "Routines" ("Id", "RoutineName", "Score", "GrandPrix", "CategoryId", "SquadId", "CompetitionId")
+VALUES ('3515daed-8bf8-4ac6-85a0-7c05e93e2055', 'Brasiliana', 0, NULL, 13, '09e4b4af-0bcf-452e-b9b9-3fa94cc58213', 'f99b8aac-1e20-4a0b-ad53-1a1704907555' );
+
+
+INSERT INTO "JudgeRatings" ("Id", "ChoreographyPoints", "BodyTechniquePoints", "RequisiteWorkPoints", "Comment", "HasBonus", "UserId", "RoutineId")
+VALUES ('ca8a6c52-3b8c-4c65-9f36-feef30ca1dc1', 8.5, 9.2, 7.8, 'Solid performance, but could improve transitions', FALSE, '3515daed-8bf8-4ac6-85a0-7c05e93e2054', '3515daed-8bf8-4ac6-85a0-7c05e93e2055');
+
+INSERT INTO "JudgeRatings" ("Id", "ChoreographyPoints", "BodyTechniquePoints", "RequisiteWorkPoints", "Comment", "HasBonus", "UserId", "RoutineId")
+VALUES ('2aeea82f-7f9b-4faa-846c-1108135781d0', 9.4, 8.7, 9.1, 'Excellent execution and creativity', FALSE, '3515daed-8bf8-4ac6-85a0-7c05e93e2054', '3515daed-8bf8-4ac6-85a0-7c05e93e2055');
