@@ -16,5 +16,6 @@ public interface IRatingService
 
     Task<OperationResult<Guid>> AddJudgeRatingToRoutine(Guid routineId, Guid judgeId, JudgeRatingWriteModel judgeRating);
     OperationResult<string> AddTechJudgeRatingToRoutine(Guid routineId,  Guid judgeId, TechJudgeRatingWriteModel techJudgeRating);
-    
+    void ExportRoutineScoresToCsvByCategory(string filePath, Guid competitionId);
+
 }

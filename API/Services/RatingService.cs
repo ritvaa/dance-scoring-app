@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System.Text;
 using API.Contracts;
 using API.Contracts.Results;
 using API.Entities;
@@ -26,24 +25,22 @@ public class RatingService : IRatingService
         var routineWithScores = GetRoutines()
             .FirstOrDefault(x => x.Id == routineId);
 
-        if (routineWithScores != null)
-        {
-            routineWithScores.Score = GetTotalScore(routineWithScores);
-        }
+        if (routineWithScores != null) routineWithScores.Score = GetTotalScore(routineWithScores);
 
         var routineWithScoresReadModel = _mapper.Map<RoutineWithScoresReadModel>(routineWithScores);
 
         var judgeRating = _mapper.Map<ICollection<JudgeRatingReadModel>>(routineWithScores.JudgeRating);
         var techJudgeRatingRead = new TechJudgeRatingReadModel
         {
-            JudgeId = routineWithScores.TechJudgeRating.Select(y=>y.User.Id).FirstOrDefault(),
+            JudgeId = routineWithScores.TechJudgeRating.Select(y => y.User.Id).FirstOrDefault(),
             PenaltyPoints =
-                _mapper.Map<List<PenaltyPointsReadModel>>(routineWithScores.TechJudgeRating.Select(x => x.PenaltyPoint).ToList())
+                _mapper.Map<List<PenaltyPointsReadModel>>(routineWithScores.TechJudgeRating.Select(x => x.PenaltyPoint)
+                    .ToList())
         };
 
         routineWithScoresReadModel.JudgeRating = judgeRating;
         routineWithScoresReadModel.TechJudgeRating = techJudgeRatingRead;
-        
+
         return routineWithScoresReadModel;
     }
 
@@ -52,13 +49,13 @@ public class RatingService : IRatingService
         return _dbContext.Routines.Include(x => x.JudgeRating)
             .ThenInclude(x => x.User)
             .Include(x => x.TechJudgeRating)
-            .ThenInclude(x=>x.PenaltyPoint)
-            .Include(x=>x.TechJudgeRating)
-            .ThenInclude(x=>x.User)
+            .ThenInclude(x => x.PenaltyPoint)
+            .Include(x => x.TechJudgeRating)
+            .ThenInclude(x => x.User)
             .Include(x => x.Squad)
-            .ThenInclude(x=>x.Team)
-            .Include(x=>x.Squad.Dancers)
-            .ThenInclude(x=>x.Dancer)
+            .ThenInclude(x => x.Team)
+            .Include(x => x.Squad.Dancers)
+            .ThenInclude(x => x.Dancer)
             .Include(x => x.Category);
     }
 
@@ -136,101 +133,83 @@ public class RatingService : IRatingService
 
         return OperationResult<string>.Success("Tech judge rating was added successfully");
     }
-    
-    public static void ExportRoutineScoresToCsvByCategory(string filePath, Guid competitionId)
+
+    public void ExportRoutineScoresToCsvByCategory(string filePath, Guid competitionId)
     {
-        using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+
+        var routines = GetRoutinesWithScoresByCompetitionId(competitionId);
+        // using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+        // {
+        //     writer.WriteLine("Lp.,Imię, Nazwisko, Nazwa Drużyny, Punkty, Miejsce");
+        //
+        //     var routines =  GetRoutines()
+        //         .Where(x => x.Competition.Id == competitionId)
+        //         .GroupBy(x=>x.Category.Id).ToArray();
+        //     
+        //      foreach (var category in routines)
+        //      {
+        //          foreach (var routine in routines[category])
+        //          {
+        //              string dancerNames;
+        //              string teamName = "";
+        //              string teamLocation = "";
+        //     
+        //              if (routine.Squad != null)
+        //              {
+        //                  teamName = routine.Squad.Team.Name;
+        //                  teamLocation = routine.Squad.Team.Location;
+        //              }
+        //              else if (routine.JudgeRating.Count() == 1)
+        //              {
+        //                  dancerNames = routine.Squad.Dancers.Select(x=>x.Dancer.FirstName + " " + x.Dancer.LastName).FirstOrDefault();
+        //              }
+        //              else // Duo/trio
+        //              {
+        //                  var dancerNamesList = routine.Squad.Dancers.Select(x=>x.Dancer.FirstName + " " + x.Dancer.LastName).ToList();
+        //                  dancerNames = string.Join(", ", dancerNamesList);
+        //              }
+        //              
+        //              string combinedCategory = $"{category} - {routine.Category}";
+        //     
+        //              writer.WriteLine($"{combinedCategory},{routine.PlaceInRank},{dancerNames},{teamName},{teamLocation},{routine.Score}");
+        //          }
+        //     }
+        // }
+    }
+
+    private List<RankingExportModel> GetRoutinesWithScoresByCompetitionId(Guid competitionId)
+    {
+        var routineByCategoryList = new List<RoutineExportModel>();
+        var categoriesWithRoutines = new List<RankingExportModel>();
+        
+        var allRoutinesWithRatings = _dbContext.Routines
+            .Where(x => x.Competition.Id == competitionId);
+
+        var categoriesInCompetition = allRoutinesWithRatings.Select(x => x.Category).ToList();
+
+        foreach (var category in categoriesInCompetition)
         {
-            writer.WriteLine("Lp.,Imię, Nazwisko, Nazwa Drużyny, Punkty, Miejsce");
+            var routinesForCategory =
+                GetRoutines().Where(x => x.Competition.Id == competitionId && x.Category.Id == category.Id).ToList();
 
-            var routines = GetRoutinesWithScoresByCompetitionId(competitionId);
-
-            foreach (var category in routines.Keys)
+            foreach (var routine in routinesForCategory)
             {
-                foreach (var routine in routines[category])
-                {
-                    string dancerNames;
-                    string teamName = "";
-                    string teamLocation = "";
 
-                    if (routine.Squad != null)
-                    {
-                        teamName = routine.Squad.Team.Name;
-                        teamLocation = routine.Squad.Team.Location;
-                    }
-                    else if (routine.JudgeRating.Count() == 1)
-                    {
-                        dancerNames = routine.Squad.Dancers.Select(x=>x.Dancer.FirstName + " " + x.Dancer.LastName).FirstOrDefault();
-                    }
-                    else // Duo/trio
-                    {
-                        var dancerNamesList = routine.Squad.Dancers.Select(x=>x.Dancer.FirstName + " " + x.Dancer.LastName).ToList();
-                        dancerNames = string.Join(", ", dancerNamesList);
-                    }
-                    
-                    string combinedCategory = $"{category} - {routine.Category}";
-
-                    writer.WriteLine($"{combinedCategory},{routine.PlaceInRank},{dancerNames},{teamName},{teamLocation},{routine.Score}");
-                }
+                var mappedRoutine = _mapper.Map<RoutineExportModel>(routine);
+                mappedRoutine.Sum = GetTotalScore(routine).ToString();
+                
+                routineByCategoryList.Add(mappedRoutine);
             }
-        }
-        
-        
-    }
-    
-   private Dictionary<string, IEnumerable<RoutineWithScoresReadModel>> GetRoutinesWithScoresByCompetitionId(Guid competitionId)
-{
-    // Pobierz wszystkie oceny dla zawodów
-    var allJudgeRatings = GetRoutines()
-        .Where(x => x.Competition.Id == competitionId)
-        .ToList();
-    
-    var alTechJudgeRatings = _dbContext.TechJudgeRatings
-        .Include(jr => jr.User)
-        .Include(jr => jr.Routine)
-        .Where(jr => jr.Routine.Competition.Id == competitionId)
-        .ToList();
 
-    // Pobierz wszystkie drużyny
-    var allSquads = _dbContext.Squads.ToList();
-
-    // Grupuj oceny według identyfikatora rutyny
-    var routinesWithRatings = allJudgeRatings
-        .GroupBy(jr => jr.Routine.Id)
-        .Select(g => new Routine()
-        {
-            Id = g.Key,
-            Score = GetTotalScore(g.First().Routine), 
-            Category = g.First().Routine.Category,
-            JudgeRating = g.Select(jr => new JudgeRating()
+            var categoryWithRoutine = new RankingExportModel
             {
-                Id = jr.Id,
-                ChoreographyPoints = jr.ChoreographyPoints,
-                BodyTechniquePoints = jr.BodyTechniquePoints,
-                RequisiteWorkPoints = jr.RequisiteWorkPoints,
-                Comment = jr.Comment,
-            }).ToList(),
-            TechJudgeRating = g.Select(x=>x.)
-            Squad = allSquads.FirstOrDefault(s => s.Id == g.First().Routine.Squad.Id)!
-        })
-        .ToList();
-
-    // Ustal pozycje w rankingu dla każdej kategorii
-    foreach (var category in routinesWithRatings.Select(r => r.Category).Distinct())
-    {
-        var categoryRoutines = routinesWithRatings.Where(r => r.Category == category).OrderByDescending(r => r.Score).ToList();
-        for (int i = 0; i < categoryRoutines.Count; i++)
-        {
-            categoryRoutines[i].PlaceInRank = i + 1;
+                Category = $"{category.Requisite} {category.CategoryType} {category.SquadType} {category.AgeCategory}",
+                Routines = routineByCategoryList
+            };
+            
+            categoriesWithRoutines.Add(categoryWithRoutine);
+            
         }
+        return categoriesWithRoutines;
     }
-
-    // Zgrupuj rutyny według kategorii
-    var routinesByCategory = routinesWithRatings.GroupBy(r => r.Category).ToDictionary(g => g.Key, g => g);
-
-    return routinesByCategory;
-}
-
-
-
 }

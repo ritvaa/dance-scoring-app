@@ -35,6 +35,14 @@ public class RatingController : ControllerBase
         var ratings = _ratingService.AddTechJudgeRatingToRoutine(routineId, judgeId, judgeRating);
         return Ok(ratings);
     }
+    
+    [HttpGet("exportRatings/{competitionId}")]
+    public void ExportRoutinesToCsv(Guid competitionId)
+    {
+        var filePath = "C:\\Users\\adaba\\source\\repos\\dance-scoring-app\\Exports"; 
+        _ratingService.ExportRoutineScoresToCsvByCategory(filePath, competitionId);
+    }
+
 
     // [HttpGet("{id}")]
     // public ActionResult<RatingReadModel> GetById(Guid id)

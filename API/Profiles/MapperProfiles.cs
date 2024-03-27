@@ -32,6 +32,13 @@ public class MapperProfiles : Profile
         CreateMap<Routine, RoutineWithScoresReadModel>()
             .ForMember(x => x.TechJudgeRating, opt => opt.Ignore())
             .ForMember(x => x.JudgeRating, opt => opt.Ignore());
+        CreateMap<Routine, RoutineExportModel>()
+            .ForMember(x => x.Sum, opt => opt.Ignore())
+            .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Squad.Dancers))
+            .ForMember(x => x.TeamName, opt => opt.MapFrom(y => $"{y.Squad.Team.Name} {y.Squad.Team.Location}"))
+            .ForMember(x => x.PlaceInRank, opt => opt.Ignore())
+            .ForMember(x => x.OrdinalNumber, opt => opt.Ignore());
+        
         CreateMap<Category, CategoryReadModel>();
         
         CreateMap<Team, TeamReadModel>();
