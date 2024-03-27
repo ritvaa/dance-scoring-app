@@ -1,4 +1,6 @@
-﻿using API.Contracts;
+﻿using System.Runtime.Intrinsics.X86;
+using System.Text;
+using API.Contracts;
 using API.Entities;
 using AutoMapper;
 
@@ -33,11 +35,12 @@ public class MapperProfiles : Profile
             .ForMember(x => x.TechJudgeRating, opt => opt.Ignore())
             .ForMember(x => x.JudgeRating, opt => opt.Ignore());
         CreateMap<Routine, RoutineExportModel>()
-            .ForMember(x => x.Sum, opt => opt.Ignore())
-            .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Squad.Dancers))
+            .ForMember(x => x.ScoreSum, opt => opt.Ignore())
+            .ForMember(x => x.DancersNames, opt => opt.MapFrom(y => MapDancersNames(y)))
             .ForMember(x => x.TeamName, opt => opt.MapFrom(y => $"{y.Squad.Team.Name} {y.Squad.Team.Location}"))
             .ForMember(x => x.PlaceInRank, opt => opt.Ignore())
-            .ForMember(x => x.OrdinalNumber, opt => opt.Ignore());
+            .ForMember(x => x.OrdinalNumber, opt => opt.Ignore())
+            .ForMember(x => x.SquadType, opt => opt.Ignore());
         
         CreateMap<Category, CategoryReadModel>();
         
@@ -61,7 +64,21 @@ public class MapperProfiles : Profile
 
         CreateMap<PenaltyPoint, PenaltyPointsReadModel>();
     }
-    
+
+    private string MapDancersNames(Routine routine)
+    {
+        
+        //todo sprawdź czy dobrze to sie eksportuje
+        var dancers = new StringBuilder();
+        var dancersNames = routine.Squad.Dancers.Select(x => x.Dancer.FullName);
+        foreach (var dancer in dancersNames)
+        {
+            dancers = dancers.AppendLine(dancer);
+        }
+        
+        return dancers.ToString();
+    }
+
 
     private List<DancerSimpifliedReadModel> MapToSimplifiedDancerModel(ICollection<SquadDancer> dancers)
     {

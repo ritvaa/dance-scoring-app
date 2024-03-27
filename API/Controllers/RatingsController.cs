@@ -29,6 +29,13 @@ public class RatingController : ControllerBase
         return Ok(ratings);
     }
     
+    [HttpPut("judgeRating/{judgeId}/routine/{routineId}")]
+    public IActionResult UpdateJudgeRating(Guid routineId, Guid judgeId, [FromBody] JudgeRatingWriteModel judgeRating)
+    {
+        var ratings = _ratingService.UpdateJudgeRatingToRoutine(routineId, judgeId, judgeRating);
+        return Ok(ratings);
+    }
+    
     [HttpPost("techJudgeRating/{judgeId}/routine/{routineId}")]
     public IActionResult AddTechJudgeRating(Guid routineId, Guid judgeId, [FromBody] TechJudgeRatingWriteModel judgeRating)
     {
@@ -39,40 +46,7 @@ public class RatingController : ControllerBase
     [HttpGet("exportRatings/{competitionId}")]
     public void ExportRoutinesToCsv(Guid competitionId)
     {
-        var filePath = "C:\\Users\\adaba\\source\\repos\\dance-scoring-app\\Exports"; 
+        var filePath = "C:\\Code\\dance-scoring-app\\Exports.csv"; 
         _ratingService.ExportRoutineScoresToCsvByCategory(filePath, competitionId);
     }
-
-
-    // [HttpGet("{id}")]
-    // public ActionResult<RatingReadModel> GetById(Guid id)
-    // {
-    //     var result = _ratingService.GetRatingById(id);
-    //     if (result.IsSuccess) return Ok(result.Data);
-    //     return Conflict(result.ErrorMessage);
-    // }
-    //
-    // [HttpPost]
-    // public IActionResult CreateRating(RatingWriteModel rating)
-    // {
-    //     var result = _ratingService.CreateRating(rating);
-    //     if (result.IsSuccess) return Ok(result.Data);
-    //     return Conflict(result.ErrorMessage);
-    // }
-    //
-    // [HttpPut("{id}")]
-    // public ActionResult<RatingReadModel> Update(Guid id, RatingWriteModel updatedRating)
-    // {
-    //     var result = _ratingService.UpdateRating(id, updatedRating);
-    //     if (result.IsSuccess) return Ok(result.Data);
-    //     return Conflict(result.ErrorMessage);
-    // }
-    //
-    // [HttpDelete("{id}")]
-    // public IActionResult DeleteRating(Guid id)
-    // {
-    //     var result = _ratingService.DeleteRating(id);
-    //     if (result.IsSuccess) return Ok(result.Data);
-    //     return Conflict(result.ErrorMessage);
-    // }
 }

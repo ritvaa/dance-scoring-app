@@ -6,7 +6,7 @@ public class Routine
 {
     [Key] public Guid Id { get; set; }
     public string? RoutineName { get; set; }
-    public decimal Score { get; set; }
+    
     public bool? GrandPrix { get; set; }
 
     #region Entity Relations

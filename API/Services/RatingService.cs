@@ -25,10 +25,10 @@ public class RatingService : IRatingService
         var routineWithScores = GetRoutines()
             .FirstOrDefault(x => x.Id == routineId);
 
-        if (routineWithScores != null) routineWithScores.Score = GetTotalScore(routineWithScores);
+        //if (routineWithScores != null) routineWithScores.Score = GetTotalScore(routineWithScores);
 
         var routineWithScoresReadModel = _mapper.Map<RoutineWithScoresReadModel>(routineWithScores);
-
+        
         var judgeRating = _mapper.Map<ICollection<JudgeRatingReadModel>>(routineWithScores.JudgeRating);
         var techJudgeRatingRead = new TechJudgeRatingReadModel
         {
@@ -40,6 +40,8 @@ public class RatingService : IRatingService
 
         routineWithScoresReadModel.JudgeRating = judgeRating;
         routineWithScoresReadModel.TechJudgeRating = techJudgeRatingRead;
+        // var score = GetTotalScore()
+        // routineWithScoresReadModel = GetTotalScore(routineWithScores)
 
         return routineWithScoresReadModel;
     }
@@ -91,6 +93,7 @@ public class RatingService : IRatingService
         newJudgeRating.Id = Guid.NewGuid();
         newJudgeRating.Routine = routine;
         newJudgeRating.User = judge;
+        
 
         try
         {
@@ -103,6 +106,11 @@ public class RatingService : IRatingService
         }
 
         return OperationResult<Guid>.Success(newJudgeRating.Id);
+    }
+
+    public Task<OperationResult<Guid>> UpdateJudgeRatingToRoutine(Guid routineId, Guid judgeId, JudgeRatingWriteModel judgeRating)
+    {
+        throw new NotImplementedException();
     }
 
     public OperationResult<string> AddTechJudgeRatingToRoutine(Guid routineId, Guid judgeId,
@@ -136,69 +144,88 @@ public class RatingService : IRatingService
 
     public void ExportRoutineScoresToCsvByCategory(string filePath, Guid competitionId)
     {
-
-        var routines = GetRoutinesWithScoresByCompetitionId(competitionId);
-        // using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
-        // {
-        //     writer.WriteLine("Lp.,Imię, Nazwisko, Nazwa Drużyny, Punkty, Miejsce");
-        //
-        //     var routines =  GetRoutines()
-        //         .Where(x => x.Competition.Id == competitionId)
-        //         .GroupBy(x=>x.Category.Id).ToArray();
-        //     
-        //      foreach (var category in routines)
-        //      {
-        //          foreach (var routine in routines[category])
-        //          {
-        //              string dancerNames;
-        //              string teamName = "";
-        //              string teamLocation = "";
-        //     
-        //              if (routine.Squad != null)
-        //              {
-        //                  teamName = routine.Squad.Team.Name;
-        //                  teamLocation = routine.Squad.Team.Location;
-        //              }
-        //              else if (routine.JudgeRating.Count() == 1)
-        //              {
-        //                  dancerNames = routine.Squad.Dancers.Select(x=>x.Dancer.FirstName + " " + x.Dancer.LastName).FirstOrDefault();
-        //              }
-        //              else // Duo/trio
-        //              {
-        //                  var dancerNamesList = routine.Squad.Dancers.Select(x=>x.Dancer.FirstName + " " + x.Dancer.LastName).ToList();
-        //                  dancerNames = string.Join(", ", dancerNamesList);
-        //              }
-        //              
-        //              string combinedCategory = $"{category} - {routine.Category}";
-        //     
-        //              writer.WriteLine($"{combinedCategory},{routine.PlaceInRank},{dancerNames},{teamName},{teamLocation},{routine.Score}");
-        //          }
-        //     }
-        // }
+        using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+        {
+            writer.WriteLine("Lp.,Imię i nazwisko/Zespół, Punkty, Miejsce");
+        
+            var routines = GetRoutinesWithScoresByCompetitionId(competitionId);
+             foreach (var category in routines)
+             {
+                 var routinesWithPlaces = GetPlacesInRankForCategoryRoutines(category.Routines);
+                 writer.WriteLine($"{category}");
+                 foreach (var routine in category.Routines)
+                 {
+                     if (routine.SquadType == SquadType.Solo || routine.SquadType == SquadType.DuoTrio)
+                     {
+                         writer.WriteLine($"{routine.OrdinalNumber},{routine.PlaceInRank},{routine.DancersNames},{routine.TeamName},{routine.ScoreSum}");
+                     }
+                     
+            
+                     writer.WriteLine($"{routine.OrdinalNumber},{routine.PlaceInRank},{routine.DancersNames},{routine.TeamName},{routine.ScoreSum}");
+                 }
+            }
+        }
     }
+
+    private List<RoutineExportModel> GetPlacesInRankForCategoryRoutines(List<RoutineExportModel> categoryRoutines)
+    {
+        // Posortuj rutyny według punktów w kolejności malejącej.
+        categoryRoutines.Sort((x, y) => y.ScoreSum.CompareTo(x.ScoreSum));
+
+        // Zainicjuj zmienną do śledzenia bieżącego miejsca.
+        int currentRank = 1;
+
+        var index = 0;
+        foreach (var routine in categoryRoutines) //routine[0]
+        {
+            if (index == 0)
+            {
+                routine.PlaceInRank = currentRank.ToString();
+            }
+            else
+            {
+                if (routine.ScoreSum == categoryRoutines[currentRank - 2].ScoreSum)
+                {
+                    routine.PlaceInRank = (currentRank-1).ToString();
+                }
+                else
+                {
+                    routine.PlaceInRank = currentRank.ToString();
+                }
+            }
+            currentRank++;
+            index++;
+        }
+        
+        return categoryRoutines.OrderBy(x=>x.OrdinalNumber).ToList();
+    }
+
 
     private List<RankingExportModel> GetRoutinesWithScoresByCompetitionId(Guid competitionId)
     {
-        var routineByCategoryList = new List<RoutineExportModel>();
         var categoriesWithRoutines = new List<RankingExportModel>();
         
         var allRoutinesWithRatings = _dbContext.Routines
             .Where(x => x.Competition.Id == competitionId);
 
-        var categoriesInCompetition = allRoutinesWithRatings.Select(x => x.Category).ToList();
+        var categoriesInCompetition = allRoutinesWithRatings.Select(x => x.Category).Distinct().ToList();
 
         foreach (var category in categoriesInCompetition)
         {
+            var routineOrdinalNumer = 1;
+            var routineByCategoryList = new List<RoutineExportModel>();
             var routinesForCategory =
                 GetRoutines().Where(x => x.Competition.Id == competitionId && x.Category.Id == category.Id).ToList();
 
             foreach (var routine in routinesForCategory)
             {
-
                 var mappedRoutine = _mapper.Map<RoutineExportModel>(routine);
-                mappedRoutine.Sum = GetTotalScore(routine).ToString();
+                mappedRoutine.ScoreSum = GetTotalScore(routine).ToString();
+                mappedRoutine.OrdinalNumber = routineOrdinalNumer;
+                mappedRoutine.SquadType = routine.Squad.SquadType;
                 
                 routineByCategoryList.Add(mappedRoutine);
+                routineOrdinalNumer += 1;
             }
 
             var categoryWithRoutine = new RankingExportModel
@@ -208,7 +235,7 @@ public class RatingService : IRatingService
             };
             
             categoriesWithRoutines.Add(categoryWithRoutine);
-            
+
         }
         return categoriesWithRoutines;
     }
